@@ -1,0 +1,1 @@
+export const SNARK_JS_PATH = "../node_modules/.bin/snarkjs"
