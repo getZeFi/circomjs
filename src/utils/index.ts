@@ -1,2 +1,2 @@
-export * as cfg from './cfg'
+export * as cfg from '../configParser'
 export * as proof from './proof'

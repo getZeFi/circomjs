@@ -1,14 +1,16 @@
 {
   "projectName": "multiplication_circuits",
+  "outputDir": "./out",
    "build" :
        {
          "inputDir": "./circuits",
+         "powerOfTauFp": "./circuits/power_of_tau.ptau",
          "circuits": [
            {
-             "name": "circuit.circom"
+             "fileName": "circuit.circom"
            },
            {
-             "name": "circuit2.circom",
+             "fileName": "circuit2.circom",
              "cID": "mul"
            }
          ]
