@@ -6,9 +6,8 @@ const {getCurveFromName} = require("./curves")
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-export const genGrothZKey = async (outputDir:string,circuitName: string, powerofTau:string): Promise<void> => {
+export const genGrothZKey = async (outputDir:string,circuitName: string, powerofTauPath:string): Promise<void> => {
     const r1cs = path.join(outputDir, circuitName+".r1cs")
-    const powerofTauPath = path.join(outputDir, powerofTau)
     const zKeyPath_0000 =  path.join(outputDir,"circuit_0000.zkey")
     const zKeyPath_0001 =  path.join(outputDir,"circuit_0001.zkey")
     const zKeyPath_0002 =  path.join(outputDir,"circuit_0002.zkey")

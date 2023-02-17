@@ -5,8 +5,8 @@ template Factors() {
     signal input y;
     signal output z;
 
-    z <-- x*y;
-    z === x*y;
+    z <-- x+y;
+    z === x+y;
 }
 
 component main = Factors();
