@@ -4,14 +4,20 @@
    "build" :
        {
          "inputDir": "./circuits",
-         "powerOfTauFp": "./circuits/power_of_tau.ptau",
          "circuits": [
            {
-             "fileName": "circuit.circom"
-           },
-           {
-             "fileName": "circuit2.circom",
-             "cID": "mul"
+             "fileName": "circuit.circom",
+             "proofType": "groth16",
+             "compilationMode": "wasm",
+             "cID": "pors",
+             "powerOfTauFp": "./circuits/power_of_tau.ptau"
+            },
+            {
+              "fileName": "circuit2.circom",
+              "cID": "mul",
+              "proofType": "groth16",
+              "compilationMode": "wasm",
+              "powerOfTauFp": "./circuits/power_of_tau.ptau"
            }
          ]
        },
