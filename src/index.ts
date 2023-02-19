@@ -14,12 +14,6 @@ const main = async () => {
     const p = await circuit.genProof({x:3, y:2}) as ZK_PROOF
     log.info("proof, circuit:%s\n", circuit._circuitConfig.cktName, p)
 
-    const circuit2 = await c.getCircuit("circuit")
-    await circuit2.compile()
-    await circuit2.genZKey()
-    const p2 = await circuit2.genProof({x:3, y:2}) as ZK_PROOF
-    log.info("proof, circuit:%s\n", circuit._circuitConfig.cktName, p)
-
     await  circuit.genVKey()
     const verificationRes = await circuit.verifyProof(p)
     console.log(verificationRes)
