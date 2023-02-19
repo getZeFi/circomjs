@@ -8,7 +8,6 @@ export type UserConfig = {
     outputDir:string,
     build: {
         inputDir: string,
-        powerOfTauFp: string,
         circuits: Array<BuildCircuitInfo>
     },
     networks:  Networks
@@ -16,8 +15,13 @@ export type UserConfig = {
 
 export type BuildCircuitInfo = {
     fileName:string,
-    cID? : string
+    cID : string,
+    powerOfTauFp?: string,
+    proofType?: SnarkType,
+    compilationMode?: CompilationMode
 }
+
+export type CompilationMode = "wasm" | "c"
 
 export type Networks = {
     [key in string]: {
