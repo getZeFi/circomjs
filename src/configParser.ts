@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import log = require('log');
+import log = require("log");
 
-import {UserConfig, BuildCircuitInfo, CircuitConfig, Networks,} from "./types";
-import {NodeWorker} from "inspector";
+import { UserConfig, BuildCircuitInfo, CircuitConfig, Networks } from "./types";
+import { NodeWorker } from "inspector";
 
 export class ConfigParser {
   _fp: string;
@@ -14,13 +14,17 @@ export class ConfigParser {
     this._fp = path.resolve(cfgFp);
     this._idToCircuitCfg = new Map();
 
-    this._userConfig = this.parseAndValidate(this._fp);
+    this._userConfig = this._parseAndValidate(this._fp);
     this._prepareIdToCircuitCfg();
   }
 
-  areCircuitsValid(circuitList: Array<BuildCircuitInfo>): boolean {
+  _areCircuitsValid(config: UserConfig): boolean {
     let isValid = true;
     let cIDListSoFar = Object.create(null);
+    const circuitList = config.build.circuits;
+    const {
+      build: { inputDir },
+    } = config;
 
     for (let i = 0; i < circuitList.length; i++) {
       // Check for all the circuit fields
@@ -37,12 +41,28 @@ export class ConfigParser {
       }
 
       cIDListSoFar[currentID] = true;
+
+      // Check if input path is valid
+      const inputFilePath = this._getCircuitInputPath(inputDir, circuitList[i]);
+      if (!fs.existsSync(inputFilePath)) {
+        isValid = false;
+        break;
+      }
+
+      // Check if ouput path is valid
+      const outputFilePath = path.resolve(".");
+      try {
+        fs.accessSync(outputFilePath, fs.constants.W_OK);
+      } catch (err) {
+        isValid = false;
+        break;
+      }
     }
 
     return isValid;
   }
 
-  parseAndValidate(fp: string): UserConfig {
+  _parseAndValidate(fp: string): UserConfig {
     log.info("reading config, path:", fp);
     const cfgBuff = fs.readFileSync(fp);
 
@@ -53,7 +73,7 @@ export class ConfigParser {
         !parsedConfig.outputDir ||
         !parsedConfig.build?.inputDir ||
         !parsedConfig.build?.circuits ||
-        !this.areCircuitsValid(parsedConfig.build.circuits) ||
+        !this._areCircuitsValid(parsedConfig) ||
         !parsedConfig.networks
       ) {
         throw new Error(`config parsing failed, filepath:${this._fp}`);
@@ -65,6 +85,10 @@ export class ConfigParser {
       console.log(`config parsing failed, filepath:${this._fp}`);
       process.exit(0);
     }
+  }
+
+  _getCircuitInputPath(inputDir: string, circuit: BuildCircuitInfo): string {
+    return path.join(inputDir, `${circuit.fileName}`);
   }
 
   _prepareIdToCircuitCfg() {
@@ -79,7 +103,7 @@ export class ConfigParser {
       const opts: CircuitConfig = {
         cId: cID,
         cktName: cktName,
-        inputFilePath: path.join(inputDir, c.fileName),
+        inputFilePath: this._getCircuitInputPath(inputDir, c),
         outputDir: cktOutputDir,
         powerOfTauFp: path.resolve(
           c.powerOfTauFp ? c.powerOfTauFp : "./circuits/power_of_tau.ptau" // Calculate total constraints from r1cs file, and download it
