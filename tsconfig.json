@@ -19,7 +19,7 @@
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "typeRoots": [ "node_modules/@types", "types" ],
-    "esModuleInterop": true
+    "esModuleInterop": true,
   },
   "exclude": [ "node_modules", "test", "types" ]
 }

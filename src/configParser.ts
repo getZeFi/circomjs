@@ -1,9 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import log = require("log");
-
+import log from "log";
 import { UserConfig, BuildCircuitInfo, CircuitConfig, Networks } from "./types";
-import { NodeWorker } from "inspector";
 
 export class ConfigParser {
   _fp: string;
