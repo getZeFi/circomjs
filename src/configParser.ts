@@ -150,7 +150,7 @@ export class ConfigParser {
         vKeyPath: path.join(cktOutputDir, "verification_key.json"), // DO NOT change the names
         compileOptions: {
           include: [],
-          snarkType: "groth16",
+          snarkType: c.proofType ? c.proofType : "groth16",
           sym: true,
           r1cs: true,
           json: false,
