@@ -1,8 +1,8 @@
 import {ContractFactory, JsonRpcProvider} from "ethers";
 
 import {CircuitConfig, Networks, Witness, ZK_PROOF} from "./types";
-import {genGrothZKey, genVerificationKey} from "./utils/zKey";
-import {genGroth16Proof, verifyGroth16Proof} from "./utils/proof";
+import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
+import {genGroth16Proof, genPlonkProof, verifyGroth16Proof} from "./utils/proof";
 import {getSolidityVerifier} from "./utils/verifier";
 import * as path from "path";
 
@@ -45,13 +45,24 @@ export class Circuit {
             this._circuitConfig.powerOfTauFp,
             this._circuitConfig.zKeyPath
         )
-        return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
+        switch (this._circuitConfig.compileOptions.snarkType) {
+            case "groth16":
+                return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
+            case "plonk":
+                const r1csFp = path.resolve(this._circuitConfig.outputDir, `${this._circuitConfig.cktName}.r1cs`)
+                return genPlonkZKey(r1csFp, this._circuitConfig.powerOfTauFp, this._circuitConfig.zKeyPath)
+        }
     }
 
     async genProof(inp: any) {
         const wasmPath = path.join(this._circuitConfig.outputDir, this._circuitConfig.cktName + '_js', this._circuitConfig.cktName + ".wasm")
         log.info('generating proof, wasm:%s, zKey:%s', wasmPath, this._circuitConfig.zKeyPath)
-        return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)
+        switch (this._circuitConfig.compileOptions.snarkType) {
+            case "groth16":
+                return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)
+            case "plonk":
+                return await genPlonkProof(inp, wasmPath, this._circuitConfig.zKeyPath)
+        }
     }
 
     async genVKey() {

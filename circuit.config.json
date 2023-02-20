@@ -5,19 +5,19 @@
        {
          "inputDir": "./circuits",
          "circuits": [
-           {
-             "fileName": "circuit.circom",
-             "proofType": "groth16",
-             "compilationMode": "wasm",
-             "cID": "pors",
-             "powerOfTauFp": "./circuits/power_of_tau.ptau"
-            },
             {
-              "fileName": "circuit2.circom",
               "cID": "mul",
+              "fileName": "circuit2.circom",
               "proofType": "groth16",
               "compilationMode": "wasm",
-              "powerOfTauFp": "./circuits/power_of_tau.ptau"
+              "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+           },
+           {
+             "cID": "circ1000constraints",
+             "fileName": "circ1000constraints.circom",
+             "proofType": "groth16",
+             "compilationMode": "wasm",
+             "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
            }
          ]
        },
