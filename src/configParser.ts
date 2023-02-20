@@ -18,25 +18,35 @@ export class ConfigParser {
     this._prepareIdToCircuitCfg();
   }
 
-  _areCircuitsValid(config: UserConfig): boolean {
-    let isValid = true;
+  _areCircuitsValid(config: UserConfig): string {
+    let validationError = "";
     let cIDListSoFar = Object.create(null);
     const circuitList = config.build.circuits;
     const {
       build: { inputDir },
     } = config;
 
+    if (circuitList.length < 1) {
+      validationError = `"circuits" field doesn't have any circuit in config json, File Path : ${this._fp}`;
+    }
+
     for (let i = 0; i < circuitList.length; i++) {
-      // Check for all the circuit fields
-      if (!circuitList[i].fileName || !circuitList[i].cID) {
-        isValid = false;
+      // Check for circuit file name
+      if (!circuitList[i].fileName) {
+        validationError = `Field "fileName" is not present in circuit on index ${i}, File Path : ${this._fp}`;
+        break;
+      }
+
+      // Check for circuit cID
+      if (!circuitList[i].cID) {
+        validationError = `Field "cID" is not present in circuit on index ${i}, File Path : ${this._fp}`;
         break;
       }
 
       // Check for unique cID
       let currentID = circuitList[i].cID;
       if (currentID in cIDListSoFar) {
-        isValid = false;
+        validationError = `Field "cID" is not unique in the circuits, File Path : ${this._fp}`;
         break;
       }
 
@@ -45,8 +55,46 @@ export class ConfigParser {
       // Check if input path is valid
       const inputFilePath = this._getCircuitInputPath(inputDir, circuitList[i]);
       if (!fs.existsSync(inputFilePath)) {
-        isValid = false;
+        validationError = `Input file path "${inputFilePath}" doesn't exist. Check "inputDir" field in config json, File Path : ${this._fp}`;
         break;
+      }
+    }
+
+    return validationError;
+  }
+
+  _parseAndValidate(fp: string): UserConfig {
+    log.info("reading config, path:", fp);
+    const cfgBuff = fs.readFileSync(fp);
+
+    try {
+      const parsedConfig: UserConfig = JSON.parse(cfgBuff.toString());
+      const circuitsValidation = this._areCircuitsValid(parsedConfig);
+
+      if (!parsedConfig) {
+        throw new Error(`Config parsing failed, filepath:${this._fp}`);
+      } else if (!parsedConfig.outputDir) {
+        throw new Error(
+          `Field "outputDir" is not present in config json, File Path : ${this._fp}`
+        );
+      } else if (!parsedConfig.build) {
+        throw new Error(
+          `Field "build" is not present in config json, File Path : ${this._fp}`
+        );
+      } else if (!parsedConfig.build.inputDir) {
+        throw new Error(
+          `Field "inputDir" is not present in config json, File Path : ${this._fp}`
+        );
+      } else if (!parsedConfig.build?.circuits) {
+        throw new Error(
+          `Field "circuits" is not present in config json, filepath:${this._fp}`
+        );
+      } else if (circuitsValidation !== "") {
+        throw new Error(circuitsValidation);
+      } else if (!parsedConfig.networks) {
+        throw new Error(
+          `Field "networks" is not present in config json, filepath:${this._fp}`
+        );
       }
 
       // Check if ouput path is valid
@@ -54,35 +102,14 @@ export class ConfigParser {
       try {
         fs.accessSync(outputFilePath, fs.constants.W_OK);
       } catch (err) {
-        isValid = false;
-        break;
-      }
-    }
-
-    return isValid;
-  }
-
-  _parseAndValidate(fp: string): UserConfig {
-    log.info("reading config, path:", fp);
-    const cfgBuff = fs.readFileSync(fp);
-
-    const parsedConfig: UserConfig = JSON.parse(cfgBuff.toString());
-    try {
-      if (
-        !parsedConfig ||
-        !parsedConfig.outputDir ||
-        !parsedConfig.build?.inputDir ||
-        !parsedConfig.build?.circuits ||
-        !this._areCircuitsValid(parsedConfig) ||
-        !parsedConfig.networks
-      ) {
-        throw new Error(`config parsing failed, filepath:${this._fp}`);
+        throw new Error(
+          `Output directory is not writable. Please check outputDir in config json, filepath:${this._fp}`
+        );
       }
 
       return Object.assign({}, parsedConfig);
     } catch (err) {
-      //   throw new Error(`config parsing failed, filepath:${this._fp}`);
-      console.log(`config parsing failed, filepath:${this._fp}`);
+      log.error(err);
       process.exit(0);
     }
   }
