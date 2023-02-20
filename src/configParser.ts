@@ -18,58 +18,21 @@ export class ConfigParser {
     this._prepareIdToCircuitCfg();
   }
 
-  _areCircuitsValid(config: UserConfig): string {
-    let validationError = "";
-    let cIDListSoFar = Object.create(null);
-    const circuitList = config.build.circuits;
-    const {
-      build: { inputDir },
-    } = config;
-
-    if (circuitList.length < 1) {
-      validationError = `"circuits" field doesn't have any circuit in config json, File Path : ${this._fp}`;
-    }
-
-    for (let i = 0; i < circuitList.length; i++) {
-      // Check for circuit file name
-      if (!circuitList[i].fileName) {
-        validationError = `Field "fileName" is not present in circuit on index ${i}, File Path : ${this._fp}`;
-        break;
-      }
-
-      // Check for circuit cID
-      if (!circuitList[i].cID) {
-        validationError = `Field "cID" is not present in circuit on index ${i}, File Path : ${this._fp}`;
-        break;
-      }
-
-      // Check for unique cID
-      let currentID = circuitList[i].cID;
-      if (currentID in cIDListSoFar) {
-        validationError = `Field "cID" is not unique in the circuits, File Path : ${this._fp}`;
-        break;
-      }
-
-      cIDListSoFar[currentID] = true;
-
-      // Check if input path is valid
-      const inputFilePath = this._getCircuitInputPath(inputDir, circuitList[i]);
-      if (!fs.existsSync(inputFilePath)) {
-        validationError = `Input file path "${inputFilePath}" doesn't exist. Check "inputDir" field in config json, File Path : ${this._fp}`;
-        break;
-      }
-    }
-
-    return validationError;
-  }
-
   _parseAndValidate(fp: string): UserConfig {
     log.info("reading config, path:", fp);
-    const cfgBuff = fs.readFileSync(fp);
 
     try {
+      try {
+        fs.accessSync(fp, fs.constants.R_OK);
+      } catch (err) {
+        throw new Error(
+          `Config file is not accessible, filepath:${fp}`
+        );
+      }
+
+      const cfgBuff = fs.readFileSync(fp);
+  
       const parsedConfig: UserConfig = JSON.parse(cfgBuff.toString());
-      const circuitsValidation = this._areCircuitsValid(parsedConfig);
 
       if (!parsedConfig) {
         throw new Error(`Config parsing failed, filepath:${this._fp}`);
@@ -89,12 +52,15 @@ export class ConfigParser {
         throw new Error(
           `Field "circuits" is not present in config json, filepath:${this._fp}`
         );
-      } else if (circuitsValidation !== "") {
-        throw new Error(circuitsValidation);
       } else if (!parsedConfig.networks) {
         throw new Error(
           `Field "networks" is not present in config json, filepath:${this._fp}`
         );
+      }
+
+      const circuitsValidation = this._areCircuitsValid(parsedConfig);
+      if (circuitsValidation !== "") {
+        throw new Error(circuitsValidation);
       }
 
       // Check if ouput path is valid
@@ -112,6 +78,47 @@ export class ConfigParser {
       log.error(err);
       process.exit(0);
     }
+  }
+
+
+  _areCircuitsValid(config: UserConfig): string {
+    let cIDListSoFar = Object.create(null);
+    const circuitList = config.build?.circuits;
+    const {
+      build: { inputDir },
+    } = config;
+
+    if (!circuitList || circuitList.length < 1) {
+      return `"circuits" field doesn't have any circuit in config json, File Path : ${this._fp}`;
+    }
+
+    for (let i = 0; i < circuitList.length; i++) {
+      // Check for circuit file name
+      if (!circuitList[i].fileName) {
+        return `Field "fileName" is not present in circuit on index ${i}, File Path : ${this._fp}`;
+      }
+
+      // Check for circuit cID
+      if (!circuitList[i].cID) {
+        return `Field "cID" is not present in circuit on index ${i}, File Path : ${this._fp}`;
+      }
+
+      // Check for unique cID
+      let currentID = circuitList[i].cID;
+      if (currentID in cIDListSoFar) {
+        return `Field "cID" is not unique in the circuits, File Path : ${this._fp}`;
+      }
+
+      cIDListSoFar[currentID] = true;
+
+      // Check if input path is valid
+      const inputFilePath = this._getCircuitInputPath(inputDir, circuitList[i]);
+      if (!fs.existsSync(inputFilePath)) {
+        return `Input file path "${inputFilePath}" doesn't exist. Check "inputDir" field in config json, File Path : ${this._fp}`;
+      }
+    }
+
+    return "";
   }
 
   _getCircuitInputPath(inputDir: string, circuit: BuildCircuitInfo): string {
