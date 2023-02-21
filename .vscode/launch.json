@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // TODO: @deepak fix this config
+            "name": "launch tsc && debug",
+            "type":"node",
+            "request": "launch",
+            "program": "${workspaceFolder}//src//index.ts",
+            "preLaunchTask": "npm: build",
+            "sourceMaps": true,
+            "smartStep": true,
+            "outFiles": [
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
+        },
+
+        {
+            "name": "launch ts-node & debug",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "node",
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
+      
+            "args": ["src/index.ts"],
+            
+            "cwd": "${workspaceRoot}",
+            "internalConsoleOptions": "openOnSessionStart",
+            "skipFiles": ["<node_internals>/**", "node_modules/**"]
+          }
+        
+    ]
+}
