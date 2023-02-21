@@ -15,7 +15,7 @@
            {
              "cID": "circ1000constraints",
              "fileName": "circ1000constraints.circom",
-             "proofType": "groth16",
+             "proofType": "plonk",
              "compilationMode": "wasm",
              "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
            }
