@@ -2,7 +2,7 @@ import {ContractFactory, JsonRpcProvider} from "ethers";
 
 import {CircuitConfig, Networks, Witness, ZK_PROOF} from "./types";
 import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
-import {genGroth16Proof, genPlonkProof, verifyGroth16Proof} from "./utils/proof";
+import {genGroth16Proof, genPlonkProof, verifyGroth16Proof, verifyPlonkProof} from "./utils/proof";
 import {getSolidityVerifier} from "./utils/verifier";
 import * as path from "path";
 
@@ -59,11 +59,11 @@ export class Circuit {
         const wasmPath = path.join(this._circuitConfig.outputDir, this._circuitConfig.cktName + '_js', this._circuitConfig.cktName + ".wasm")
         log.info('generating proof, wasm:%s, zKey:%s', wasmPath, this._circuitConfig.zKeyPath)
         switch (this._circuitConfig.compileOptions.snarkType) {
-            case "groth16":
-                return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)
             case "plonk":
                 return await genPlonkProof(inp, wasmPath, this._circuitConfig.zKeyPath)
-        }
+            case "groth16":
+            default:
+                return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)        }
     }
 
     async genVKey() {
@@ -76,7 +76,13 @@ export class Circuit {
     }
 
     async verifyProof(p: ZK_PROOF) {
-        return await verifyGroth16Proof(this._circuitConfig.vKeyPath, p)
+        switch (this._circuitConfig.compileOptions.snarkType) {
+            case "plonk":
+                return await verifyPlonkProof(this._circuitConfig.vKeyPath, p)
+            case "groth16":
+            default:
+                return await verifyGroth16Proof(this._circuitConfig.vKeyPath, p)
+        }
     }
 
     async _deploySmartContractVerifier(networkName: string) {
