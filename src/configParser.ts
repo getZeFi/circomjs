@@ -23,13 +23,11 @@ export class ConfigParser {
       try {
         fs.accessSync(fp, fs.constants.R_OK);
       } catch (err) {
-        throw new Error(
-          `Config file is not accessible, filepath:${fp}`
-        );
+        throw err;
       }
 
       const cfgBuff = fs.readFileSync(fp);
-  
+
       const parsedConfig: UserConfig = JSON.parse(cfgBuff.toString());
 
       if (!parsedConfig) {
@@ -73,11 +71,9 @@ export class ConfigParser {
 
       return Object.assign({}, parsedConfig);
     } catch (err) {
-      log.error(err);
-      process.exit(0);
+      throw err;
     }
   }
-
 
   _areCircuitsValid(config: UserConfig): string {
     let cIDListSoFar = Object.create(null);
@@ -112,7 +108,7 @@ export class ConfigParser {
       // Check if input path is valid
       const inputFilePath = this._getCircuitInputPath(inputDir, circuitList[i]);
       if (!fs.existsSync(inputFilePath)) {
-        return `Input file path "${inputFilePath}" doesn't exist. Check "inputDir" field in config json, File Path : ${this._fp}`;
+        return `Input file path doesn't exist. Check "inputDir" field in config json, File Path : ${this._fp}`;
       }
     }
 
