@@ -46,11 +46,12 @@ export class Circuit {
             this._circuitConfig.zKeyPath
         )
         switch (this._circuitConfig.compileOptions.snarkType) {
-            case "groth16":
-                return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
             case "plonk":
                 const r1csFp = path.resolve(this._circuitConfig.outputDir, `${this._circuitConfig.cktName}.r1cs`)
                 return genPlonkZKey(r1csFp, this._circuitConfig.powerOfTauFp, this._circuitConfig.zKeyPath)
+            case "groth16":
+            default:
+                return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
         }
     }
 

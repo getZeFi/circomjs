@@ -5,8 +5,8 @@ import * as fs from "fs";
 const {zKey} = require('snarkjs')
 const {plonk} = require('snarkjs')
 const {getCurveFromName} = require("./curves")
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+// const util = require('util');
+// const exec = util.promisify(require('child_process').exec);
 
 export const genGrothZKey = async (outputDir: string, circuitName: string, powerofTauPath: string): Promise<void> => {
     const r1cs = path.join(outputDir, circuitName + ".r1cs")
@@ -33,7 +33,7 @@ export const genGrothZKey = async (outputDir: string, circuitName: string, power
     await zKey.beacon(zKeyPath_0003, zKeyFinal, "Final beacon phase 2", "0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f", 10)
 
     // TODO: this must node take place from shell, quick fix for now
-    const {stderr} = await exec(`snarkjs zkey beacon ${zKeyPath_0003} ${zKeyFinal} 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon phase2"`)
+    // const {stderr} = await exec(`snarkjs zkey beacon ${zKeyPath_0003} ${zKeyFinal} 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 10 -n="Final Beacon phase2"`)
     // if(stderr){
     //     throw new Error(stderr)
     // }
