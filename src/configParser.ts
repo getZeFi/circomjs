@@ -172,7 +172,7 @@ export class ConfigParser {
     return Array.from(this._idToCircuitCfg.keys());
   }
 
-  getNewtworks(): Networks {
+  getNetworks(): Networks {
     return this._userConfig.networks;
   }
 }

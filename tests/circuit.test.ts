@@ -35,34 +35,29 @@ describe("Circuit test", () => {
     }
   }, 20000);
 
-  // it("should calculate witness", async () => {
-  //   const inputFilePath = `./tests/data/${uuidv4()}.json`;
-  //   const jsonInput = `{"x": 3, "y": 2}`;
-  //   fs.writeFileSync(inputFilePath, jsonInput);
+  it("should calculate witness", async () => {
+ 
+    const c = new CircomJS();
+    const circuit = c.getCircuit("mul");
+    await circuit.compile();
+    await circuit.genZKey();
+    const w = await circuit.calculateWitness({ x: 3, y: 2 });
 
-  //   try {
-  //     const c = new CircomJS();
-  //     const circuit = c.getCircuit("mul");
-  //     await circuit.compile();
-  //     await circuit.genZKey();
-  //     const w = await circuit.calculateWitness({x: 3, y: 2})
+    // generatedWitness file should be equal to testWitnessData file
 
-  //     const wasmPath = path.join(circuit._circuitConfig.outputDir, circuit._circuitConfig.cktName + '_js', circuit._circuitConfig.cktName + ".wasm")
-  //     const generateWitnessJsPath = path.join(circuit._circuitConfig.outputDir, circuit._circuitConfig.cktName + '_js', "generate_witness.js")
+    // const inputFilePath = `./tests/data/${uuidv4()}.json`;
+    // const jsonInput = `{"x": 3, "y": 2}`;
+    // fs.writeFileSync(inputFilePath, jsonInput);
+    // const wasmPath = path.join(circuit._circuitConfig.outputDir, circuit._circuitConfig.cktName + '_js', circuit._circuitConfig.cktName + ".wasm")
+    // const generateWitnessJsPath = path.join(circuit._circuitConfig.outputDir, circuit._circuitConfig.cktName + '_js', "generate_witness.js")
+    // const original = BigInt64Array.from(w);
+    // fs.writeFileSync('./tests/data/testWitnessData.wtns', original);
+    // await exec(`node ${generateWitnessJsPath} ${wasmPath} ${inputFilePath}  ./tests/data/generatedWitness.wtns`)
 
-  //     const original = BigInt64Array.from(w);
-  //     fs.writeFileSync('./tests/data/testWitnessData.wtns', original);
+    expect(typeof w).toEqual("object");
 
-  //     await exec(`node ${generateWitnessJsPath} ${wasmPath} ${inputFilePath}  ./tests/data/generatedWitness.wtns`)
-
-  //     // expect(true).toEqual(true); generatedWitness file should be equal to testWitnessData file
-
-  //     fs.rmSync(inputFilePath);
-  //   } catch (e) {
-  //     fs.rmSync(inputFilePath);
-  //     expect(e).toBe(e);
-  //   }
-  // }, 30000);
+    // fs.rmSync(inputFilePath);
+  }, 30000);
 
   it("should generate proof", async () => {
     const input = { x: 3, y: 2 };
