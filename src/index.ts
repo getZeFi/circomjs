@@ -19,10 +19,9 @@ async function runPipeline(c: CircomJS, cId: string, inp: any) {
 }
 
 const main = async () => {
-    const c = new CircomJS()
+    const c = new CircomJS("./circuit.config.json")
     await runPipeline(c, "mul", {x: 3, y: 2})                       // Groth16
     await runPipeline(c, "circ1000constraints", {"a": 3, "b": 11})  // Plonk
-
 
     // const address = await circuit._deploySmartContractVerifier("")
     // console.log(address)

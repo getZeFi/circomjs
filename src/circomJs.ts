@@ -5,8 +5,8 @@ export default class CircomJS {
     _configParser: ConfigParser;
     _cIdToCircuit: Map<string, Circuit>;
 
-    constructor() {
-        this._configParser = new ConfigParser("./circuit.config.json");
+    constructor(configFilePath: string) {
+        this._configParser = new ConfigParser(configFilePath);
         this._cIdToCircuit = new Map<string, Circuit>();
 
         this._configParser.listCircuitIds().map(cId => {
