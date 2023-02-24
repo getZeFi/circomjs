@@ -1,15 +1,50 @@
-// import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
 import * as path from "path";
 
 import CircomJS from "../src/circomJs";
 import { ZK_PROOF } from "../src/types";
-// const util = require("util");
-// const exec = util.promisify(require("child_process").exec);
+
+const testConfigPath = `tests/data/circuitTestConfig.json`;
+const jsonConfig = `
+{
+  "projectName": "multiplication_circuits",
+  "outputDir": "./out",
+   "build" :
+       {
+         "inputDir": "./circuits",
+         "circuits": [
+            {
+              "cID": "mul",
+              "fileName": "circuit2.circom",
+              "proofType": "groth16",
+              "compilationMode": "wasm",
+              "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+           },
+           {
+             "cID": "circ1000constraints",
+             "fileName": "circ1000constraints.circom",
+             "proofType": "plonk",
+             "compilationMode": "wasm",
+             "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+           }
+         ]
+       },
+  "networks": {
+    "mumbai" : {
+      "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
+      "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+    }
+  }
+}
+`;
 
 describe("Circuit test", () => {
+  beforeAll(() => {
+    fs.writeFileSync(testConfigPath, jsonConfig);
+  });
+
   it("should instantiate wasmTester", async () => {
-    const c = new CircomJS();
+    const c = new CircomJS(testConfigPath);
     const circuit = await c.getCircuit("mul");
     await circuit.compile();
 
@@ -17,52 +52,35 @@ describe("Circuit test", () => {
   });
 
   it("should generate zKey", async () => {
-    try {
-      const c = new CircomJS();
+    const c = new CircomJS(testConfigPath);
 
-      const circuit = c.getCircuit("mul");
-      await circuit.compile();
-      await circuit.genZKey();
-      const zKeyFinalPath = path.join(
-        circuit._circuitConfig.outputDir,
-        "circuit_final.zkey"
-      );
+    const circuit = c.getCircuit("mul");
+    await circuit.compile();
+    await circuit.genZKey();
+    const zKeyFinalPath = path.join(
+      circuit._circuitConfig.outputDir,
+      "circuit_final.zkey"
+    );
 
-      const isZKeyCreated = fs.existsSync(zKeyFinalPath);
-      expect(isZKeyCreated).toBe(true);
-    } catch (e) {
-      expect(e).toBe(e);
-    }
+    const isZKeyCreated = fs.existsSync(zKeyFinalPath);
+    expect(isZKeyCreated).toBe(true);
   }, 20000);
 
   it("should calculate witness", async () => {
- 
-    const c = new CircomJS();
+    const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("mul");
     await circuit.compile();
     await circuit.genZKey();
     const w = await circuit.calculateWitness({ x: 3, y: 2 });
+    const testWitness = "1,6,3,2"; // For this cID and inputs, this should be the witness string
 
-    // generatedWitness file should be equal to testWitnessData file
-
-    // const inputFilePath = `./tests/data/${uuidv4()}.json`;
-    // const jsonInput = `{"x": 3, "y": 2}`;
-    // fs.writeFileSync(inputFilePath, jsonInput);
-    // const wasmPath = path.join(circuit._circuitConfig.outputDir, circuit._circuitConfig.cktName + '_js', circuit._circuitConfig.cktName + ".wasm")
-    // const generateWitnessJsPath = path.join(circuit._circuitConfig.outputDir, circuit._circuitConfig.cktName + '_js', "generate_witness.js")
-    // const original = BigInt64Array.from(w);
-    // fs.writeFileSync('./tests/data/testWitnessData.wtns', original);
-    // await exec(`node ${generateWitnessJsPath} ${wasmPath} ${inputFilePath}  ./tests/data/generatedWitness.wtns`)
-
-    expect(typeof w).toEqual("object");
-
-    // fs.rmSync(inputFilePath);
+    expect(w.toString()).toEqual(testWitness);
   }, 30000);
 
   it("should generate proof", async () => {
     const input = { x: 3, y: 2 };
 
-    const c = new CircomJS();
+    const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("mul");
     await circuit.compile();
     await circuit.genZKey();
@@ -81,7 +99,7 @@ describe("Circuit test", () => {
 
   it("should generate verification Key", async () => {
     const input = { x: 3, y: 2 };
-    const c = new CircomJS();
+    const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("mul");
 
     await circuit.compile();
@@ -111,7 +129,7 @@ describe("Circuit test", () => {
   it("should verify proof", async () => {
     const input = { x: 3, y: 2 };
 
-    const c = new CircomJS();
+    const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("mul");
     await circuit.compile();
     await circuit.genZKey();
@@ -122,4 +140,8 @@ describe("Circuit test", () => {
 
     expect(verificationRes).toBe(true);
   }, 30000);
+
+  afterAll(() => {
+    fs.rmSync(testConfigPath);
+  });
 });
