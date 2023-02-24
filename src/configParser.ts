@@ -60,7 +60,7 @@ export class ConfigParser {
       }
 
       // Check if ouput path is valid
-      const outputFilePath = path.resolve(".");
+      const outputFilePath = path.resolve(parsedConfig.outputDir);
       try {
         fs.accessSync(outputFilePath, fs.constants.W_OK);
       } catch (err) {
