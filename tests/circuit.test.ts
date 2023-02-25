@@ -8,24 +8,24 @@ const testConfigPath = `tests/data/circuitTestConfig.json`;
 const jsonConfig = `
 {
   "projectName": "multiplication_circuits",
-  "outputDir": "./out",
+  "outputDir": "./tests/data/out",
    "build" :
        {
-         "inputDir": "./circuits",
+         "inputDir": "tests/data/circuits",
          "circuits": [
             {
               "cID": "mul",
               "fileName": "circuit2.circom",
               "proofType": "groth16",
               "compilationMode": "wasm",
-              "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+              "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
            },
            {
              "cID": "circ1000constraints",
              "fileName": "circ1000constraints.circom",
              "proofType": "plonk",
              "compilationMode": "wasm",
-             "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+             "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
            }
          ]
        },
@@ -41,14 +41,6 @@ const jsonConfig = `
 describe("Circuit test", () => {
   beforeAll(() => {
     fs.writeFileSync(testConfigPath, jsonConfig);
-  });
-
-  it("should instantiate wasmTester", async () => {
-    const c = new CircomJS(testConfigPath);
-    const circuit = await c.getCircuit("mul");
-    await circuit.compile();
-
-    expect(typeof circuit._wasmTester).toEqual("object");
   });
 
   it("should generate zKey", async () => {

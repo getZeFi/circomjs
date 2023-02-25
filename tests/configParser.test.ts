@@ -11,24 +11,24 @@ describe("ConfigParser test", () => {
     const jsonConfig = `
         {
           "projectName": "multiplication_circuits",
-          "outputDir": "./out",
+          "outputDir": "./tests/data/out",
            "build" :
                {
-                 "inputDir": "./circuits",
+                 "inputDir": "tests/data/circuits",
                  "circuits": [
                     {
                       "cID": "mul",
                       "fileName": "circuit2.circom",
                       "proofType": "groth16",
                       "compilationMode": "wasm",
-                      "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                      "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                    },
                    {
                      "cID": "circ1000constraints",
                      "fileName": "circ1000constraints.circom",
                      "proofType": "groth16",
                      "compilationMode": "wasm",
-                     "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                     "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                    }
                  ]
                },
@@ -58,7 +58,7 @@ describe("ConfigParser test", () => {
     const jsonConfig = `
       {
         // "projectName": "multiplication_circuits",
-        "outputDir": "./out"
+        "outputDir": "./tests/data/out"
       }`;
 
     fs.writeFileSync(configPath, jsonConfig);
@@ -91,21 +91,21 @@ describe("ConfigParser test", () => {
             "outputDir": "../../../../../../",
              "build" :
                  {
-                   "inputDir": "./circuits",
+                   "inputDir": "tests/data/circuits",
                    "circuits": [
                       {
                         "cID": "mul",
                         "fileName": "circuit2.circom",
                         "proofType": "groth16",
                         "compilationMode": "wasm",
-                        "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                        "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                      },
                      {
                        "cID": "circ1000constraints",
                        "fileName": "circ1000constraints.circom",
                        "proofType": "groth16",
                        "compilationMode": "wasm",
-                       "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                       "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                      }
                    ]
                  },
@@ -130,7 +130,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
         {
           "projectName": "multiplication_circuits",
-          "outputDir": "./out"
+          "outputDir": "./tests/data/out"
         }`;
 
       fs.writeFileSync(configPath, jsonConfig);
@@ -147,7 +147,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
         {
           "projectName": "multiplication_circuits",
-          "outputDir": "./out",
+          "outputDir": "./tests/data/out",
           "build" : {}
         }`;
 
@@ -165,7 +165,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
          "build" :
              {
                "inputDir": "./circuits"
@@ -186,24 +186,24 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
          "build" :
              {
-               "inputDir": "./circuits",
+               "inputDir": "tests/data/circuits",
                "circuits": [
                   {
                     "cID": "mul",
                     "fileName": "circuit2.circom",
                     "proofType": "groth16",
                     "compilationMode": "wasm",
-                    "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                    "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                   },
                   {
                     "cID": "circ1000constraints",
                     "fileName": "circ1000constraints.circom",
                     "proofType": "groth16",
                     "compilationMode": "wasm",
-                    "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                    "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                   }
                 ]
              }
@@ -223,9 +223,9 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" : {
-          "inputDir": "./circuits",
+          "inputDir": "tests/data/circuits",
           "circuits": []
         },
         "networks": {
@@ -250,23 +250,23 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
-            "inputDir": "./circuits",
+            "inputDir": "tests/data/circuits",
             "circuits": [
               {
                 "cID": "mul",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },
@@ -292,23 +292,23 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
-            "inputDir": "./circuits",
+            "inputDir": "tests/data/circuits",
             "circuits": [
               {
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },
@@ -334,24 +334,24 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
-            "inputDir": "./circuits",
+            "inputDir": "tests/data/circuits",
             "circuits": [
               {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },
@@ -377,7 +377,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
             "inputDir": "./inputCircuitsDir",
@@ -387,14 +387,14 @@ describe("ConfigParser test", () => {
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },

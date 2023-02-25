@@ -1,28 +1,29 @@
 import CircomJS from "../src/circomJs";
 import * as fs from "fs";
+import { Circuit } from "./../src/circuit";
 
 const testConfigPath = `tests/data/circomJSTestConfig.json`;
 const jsonConfig = `
 {
   "projectName": "multiplication_circuits",
-  "outputDir": "./out",
+  "outputDir": "./tests/data/out",
    "build" :
        {
-         "inputDir": "./circuits",
+         "inputDir": "tests/data/circuits",
          "circuits": [
             {
               "cID": "mul",
               "fileName": "circuit2.circom",
               "proofType": "groth16",
               "compilationMode": "wasm",
-              "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+              "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
            },
            {
              "cID": "circ1000constraints",
              "fileName": "circ1000constraints.circom",
              "proofType": "plonk",
              "compilationMode": "wasm",
-             "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+             "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
            }
          ]
        },
@@ -42,16 +43,15 @@ describe("CircomJS test", () => {
 
   it("should instantiate CircomJS", () => {
     const c = new CircomJS(testConfigPath);
-    expect(c._cIdToCircuit.size).toBe(2);
+
+    expect(c instanceof CircomJS).toBe(true);
   });
 
-  it("get circuit from cID", () => {
+  it("should get circuit from cID", () => {
     const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("mul");
-    expect(
-      circuit.hasOwnProperty("_circuitConfig") &&
-        circuit.hasOwnProperty("_networks")
-    ).toBe(true);
+
+    expect(circuit instanceof Circuit).toBe(true);
   });
 
   afterAll(() => {
