@@ -33,9 +33,9 @@ describe("ConfigParser test", () => {
                  ]
                },
           "networks": {
-            "mumbai" : {
-              "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-              "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+            "delhi" : {
+              "RPC": "http://url:8080/v1/2323 ",
+              "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
             }
           }
         }`;
@@ -110,9 +110,9 @@ describe("ConfigParser test", () => {
                    ]
                  },
             "networks": {
-              "mumbai" : {
-                "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-                "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+              "delhi" : {
+                "RPC": "http://url:8080/v1/2323 ",
+                "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
               }
             }
           }`;
@@ -229,9 +229,9 @@ describe("ConfigParser test", () => {
           "circuits": []
         },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -271,9 +271,9 @@ describe("ConfigParser test", () => {
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -313,9 +313,9 @@ describe("ConfigParser test", () => {
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -356,9 +356,9 @@ describe("ConfigParser test", () => {
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -399,9 +399,9 @@ describe("ConfigParser test", () => {
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
