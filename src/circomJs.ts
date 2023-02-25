@@ -2,8 +2,8 @@ import {ConfigParser} from './configParser'
 import {Circuit} from "./circuit";
 
 export default class CircomJS {
-    _configParser: ConfigParser;
-    _cIdToCircuit: Map<string, Circuit>;
+    private _configParser: ConfigParser;
+    private _cIdToCircuit: Map<string, Circuit>;
 
     constructor(configFilePath = "./circuit.config.json") {
         this._configParser = new ConfigParser(configFilePath);

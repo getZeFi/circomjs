@@ -1,6 +1,5 @@
 import CircomJS from "./circomJs"
 import {ZK_PROOF} from "./types";
-import log = require('log');
 
 require("log-node")();
 
@@ -11,7 +10,6 @@ async function runPipeline(c: CircomJS, cId: string, inp: any) {
     const w = await circuit.calculateWitness(inp)
     console.log(w)
     const p = await circuit.genProof(inp) as ZK_PROOF
-    log.info("proof, circuit:%s\n", circuit._circuitConfig.cktName, p)
     await circuit.genVKey()
     const verificationRes = await circuit.verifyProof(p)
     console.log(verificationRes)

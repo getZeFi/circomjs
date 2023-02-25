@@ -4,9 +4,9 @@ import log from "log";
 import { UserConfig, BuildCircuitInfo, CircuitConfig, Networks } from "./types";
 
 export class ConfigParser {
-  _fp: string;
-  _userConfig: UserConfig;
-  _idToCircuitCfg: Map<string, CircuitConfig>;
+  private _fp: string;
+  private _userConfig: UserConfig;
+  private _idToCircuitCfg: Map<string, CircuitConfig>;
 
   constructor(cfgFp: string) {
     this._fp = path.resolve(cfgFp);
@@ -16,7 +16,7 @@ export class ConfigParser {
     this._prepareIdToCircuitCfg();
   }
 
-  _parseAndValidate(fp: string): UserConfig {
+  private _parseAndValidate(fp: string): UserConfig {
     log.info("reading config, path:", fp);
 
     try {
@@ -75,7 +75,7 @@ export class ConfigParser {
     }
   }
 
-  _areCircuitsValid(config: UserConfig): string {
+  private _areCircuitsValid(config: UserConfig): string {
     let cIDListSoFar = Object.create(null);
     const circuitList = config.build?.circuits;
     const {
@@ -115,11 +115,11 @@ export class ConfigParser {
     return "";
   }
 
-  _getCircuitInputPath(inputDir: string, circuit: BuildCircuitInfo): string {
+  private _getCircuitInputPath(inputDir: string, circuit: BuildCircuitInfo): string {
     return path.join(inputDir, `${circuit.fileName}`);
   }
 
-  _prepareIdToCircuitCfg() {
+  private _prepareIdToCircuitCfg() {
     const { outputDir } = this._userConfig;
     const { inputDir, circuits } = this._userConfig.build;
 
@@ -157,7 +157,7 @@ export class ConfigParser {
     });
   }
 
-  _getCircuitName(fileName: string) {
+  private _getCircuitName(fileName: string) {
     return fileName.split(".")[0];
   }
 
