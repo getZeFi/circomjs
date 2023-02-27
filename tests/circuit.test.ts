@@ -19,7 +19,7 @@ const jsonConfig = `
          "circuits": [
             {
               "cID": "mul",
-              "fileName": "circuit2.circom",
+              "fileName": "testtemp/circuit2.circom",
               "proofType": "groth16",
               "compilationMode": "wasm",
               "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
@@ -54,13 +54,22 @@ describe("Circuit test", () => {
   it("should generate zKey", async () => {
     const c = new CircomJS(testConfigPath);
 
-    const circuit = c.getCircuit("mul");
-    await circuit.compile();
-    await circuit.genZKey();
-    const zKeyFinalPath = path.join(circuit.getOutputDIR(),"circuit_final.zkey");
+    const cIDToCircuitsMap = c.getCidToCircuit;
+    const cIDList = Array.from(cIDToCircuitsMap.keys());
 
-    const isZKeyCreated = fs.existsSync(zKeyFinalPath);
-    expect(isZKeyCreated).toBe(true);
+    cIDList.forEach(async (cID) => {
+      const circuit = c.getCircuit(cID);
+
+      await circuit.compile();
+      await circuit.genZKey();
+      const zKeyFinalPath = path.join(
+        circuit.getOutputDIR(),
+        "circuit_final.zkey"
+      );
+
+      const isZKeyCreated = fs.existsSync(zKeyFinalPath);
+      expect(isZKeyCreated).toBe(true);
+    });
   }, 20000);
 
   it("should calculate witness", async () => {
@@ -105,10 +114,7 @@ describe("Circuit test", () => {
     await circuit.genProof(input);
     await circuit.genVKey();
 
-    const vKeyPath = path.join(
-        circuit.getOutputDIR(),
-        "verification_key.json"
-    );
+    const vKeyPath = path.join(circuit.getOutputDIR(), "verification_key.json");
 
     const vKeyObject = JSON.parse(fs.readFileSync(vKeyPath, "utf8"));
 
@@ -124,10 +130,10 @@ describe("Circuit test", () => {
   }, 30000);
 
   it("should verify proof", async () => {
-    const input = { x: 3, y: 2 };
+    const input = { a: 3, b: 11 };
 
     const c = new CircomJS(testConfigPath);
-    const circuit = c.getCircuit("mul");
+    const circuit = c.getCircuit("circ1000constraints");
     await circuit.compile();
     await circuit.genZKey();
     await circuit.calculateWitness(input);

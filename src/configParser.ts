@@ -158,7 +158,7 @@ export class ConfigParser {
   }
 
   private _getCircuitName(fileName: string) {
-    return fileName.split(".")[0];
+    return fileName.replace(/^.*[\\\/]/, '').split(".")[0];
   }
 
   getCircuitConfigFromId(cid: string): CircuitConfig {
