@@ -8,31 +8,31 @@ const testConfigPath = `tests/data/circuitTestConfig.json`;
 const jsonConfig = `
 {
   "projectName": "multiplication_circuits",
-  "outputDir": "./out",
+  "outputDir": "./tests/data/out",
    "build" :
        {
-         "inputDir": "./circuits",
+         "inputDir": "tests/data/circuits",
          "circuits": [
             {
               "cID": "mul",
               "fileName": "circuit2.circom",
               "proofType": "groth16",
               "compilationMode": "wasm",
-              "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+              "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
            },
            {
              "cID": "circ1000constraints",
              "fileName": "circ1000constraints.circom",
              "proofType": "plonk",
              "compilationMode": "wasm",
-             "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+             "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
            }
          ]
        },
   "networks": {
-    "mumbai" : {
-      "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-      "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+    "delhi" : {
+      "RPC": "http://url:8080/v1/2323 ",
+      "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
     }
   }
 }
@@ -43,24 +43,13 @@ describe("Circuit test", () => {
     fs.writeFileSync(testConfigPath, jsonConfig);
   });
 
-  it("should instantiate wasmTester", async () => {
-    const c = new CircomJS(testConfigPath);
-    const circuit = await c.getCircuit("mul");
-    await circuit.compile();
-
-    expect(typeof circuit._wasmTester).toEqual("object");
-  });
-
   it("should generate zKey", async () => {
     const c = new CircomJS(testConfigPath);
 
     const circuit = c.getCircuit("mul");
     await circuit.compile();
     await circuit.genZKey();
-    const zKeyFinalPath = path.join(
-      circuit._circuitConfig.outputDir,
-      "circuit_final.zkey"
-    );
+    const zKeyFinalPath = path.join(circuit.getOutputDIR(),"circuit_final.zkey");
 
     const isZKeyCreated = fs.existsSync(zKeyFinalPath);
     expect(isZKeyCreated).toBe(true);
@@ -109,8 +98,8 @@ describe("Circuit test", () => {
     await circuit.genVKey();
 
     const vKeyPath = path.join(
-      circuit._circuitConfig.outputDir,
-      "verification_key.json"
+        circuit.getOutputDIR(),
+        "verification_key.json"
     );
 
     const vKeyObject = JSON.parse(fs.readFileSync(vKeyPath, "utf8"));

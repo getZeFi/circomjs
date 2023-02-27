@@ -11,37 +11,37 @@ describe("ConfigParser test", () => {
     const jsonConfig = `
         {
           "projectName": "multiplication_circuits",
-          "outputDir": "./out",
+          "outputDir": "./tests/data/out",
            "build" :
                {
-                 "inputDir": "./circuits",
+                 "inputDir": "tests/data/circuits",
                  "circuits": [
                     {
                       "cID": "mul",
                       "fileName": "circuit2.circom",
                       "proofType": "groth16",
                       "compilationMode": "wasm",
-                      "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                      "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                    },
                    {
                      "cID": "circ1000constraints",
                      "fileName": "circ1000constraints.circom",
                      "proofType": "groth16",
                      "compilationMode": "wasm",
-                     "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                     "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                    }
                  ]
                },
           "networks": {
-            "mumbai" : {
-              "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-              "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+            "delhi" : {
+              "RPC": "http://url:8080/v1/2323 ",
+              "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
             }
           }
         }`;
     fs.writeFileSync(configPath, jsonConfig);
     const cfgparser = new ConfigParser(configPath);
-    expect(cfgparser._userConfig).toEqual(JSON.parse(jsonConfig));
+    expect(cfgparser.getCFG()).toEqual(JSON.parse(jsonConfig));
     fs.rmSync(configPath);
   });
 
@@ -58,7 +58,7 @@ describe("ConfigParser test", () => {
     const jsonConfig = `
       {
         // "projectName": "multiplication_circuits",
-        "outputDir": "./out"
+        "outputDir": "./tests/data/out"
       }`;
 
     fs.writeFileSync(configPath, jsonConfig);
@@ -91,28 +91,28 @@ describe("ConfigParser test", () => {
             "outputDir": "../../../../../../",
              "build" :
                  {
-                   "inputDir": "./circuits",
+                   "inputDir": "tests/data/circuits",
                    "circuits": [
                       {
                         "cID": "mul",
                         "fileName": "circuit2.circom",
                         "proofType": "groth16",
                         "compilationMode": "wasm",
-                        "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                        "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                      },
                      {
                        "cID": "circ1000constraints",
                        "fileName": "circ1000constraints.circom",
                        "proofType": "groth16",
                        "compilationMode": "wasm",
-                       "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                       "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                      }
                    ]
                  },
             "networks": {
-              "mumbai" : {
-                "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-                "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+              "delhi" : {
+                "RPC": "http://url:8080/v1/2323 ",
+                "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
               }
             }
           }`;
@@ -130,7 +130,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
         {
           "projectName": "multiplication_circuits",
-          "outputDir": "./out"
+          "outputDir": "./tests/data/out"
         }`;
 
       fs.writeFileSync(configPath, jsonConfig);
@@ -147,7 +147,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
         {
           "projectName": "multiplication_circuits",
-          "outputDir": "./out",
+          "outputDir": "./tests/data/out",
           "build" : {}
         }`;
 
@@ -165,7 +165,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
          "build" :
              {
                "inputDir": "./circuits"
@@ -186,24 +186,24 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
          "build" :
              {
-               "inputDir": "./circuits",
+               "inputDir": "tests/data/circuits",
                "circuits": [
                   {
                     "cID": "mul",
                     "fileName": "circuit2.circom",
                     "proofType": "groth16",
                     "compilationMode": "wasm",
-                    "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                    "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                   },
                   {
                     "cID": "circ1000constraints",
                     "fileName": "circ1000constraints.circom",
                     "proofType": "groth16",
                     "compilationMode": "wasm",
-                    "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                    "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                   }
                 ]
              }
@@ -223,15 +223,15 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" : {
-          "inputDir": "./circuits",
+          "inputDir": "tests/data/circuits",
           "circuits": []
         },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -250,30 +250,30 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
-            "inputDir": "./circuits",
+            "inputDir": "tests/data/circuits",
             "circuits": [
               {
                 "cID": "mul",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -292,30 +292,30 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
-            "inputDir": "./circuits",
+            "inputDir": "tests/data/circuits",
             "circuits": [
               {
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -334,31 +334,31 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
-            "inputDir": "./circuits",
+            "inputDir": "tests/data/circuits",
             "circuits": [
               {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;
@@ -377,7 +377,7 @@ describe("ConfigParser test", () => {
       const jsonConfig = `
       {
         "projectName": "multiplication_circuits",
-        "outputDir": "./out",
+        "outputDir": "./tests/data/out",
         "build" :
           {
             "inputDir": "./inputCircuitsDir",
@@ -387,21 +387,21 @@ describe("ConfigParser test", () => {
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
                 "compilationMode": "wasm",
-                "powerOfTauFp": "./out/powersOfTau28_hez_final_14.ptau"
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
           },
         "networks": {
-          "mumbai" : {
-            "RPC": "https://polygon-mumbai.g.alchemy.com/v2/r15gVaDKI0GNNov_-T5PGSBfxxDLLcNN",
-            "PRIV_KEY": "0xbE8052f1c93A45Cf71ce06540C8b0B3c8e96dAfD"
+          "delhi" : {
+            "RPC": "http://url:8080/v1/2323 ",
+            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
         }
       }`;

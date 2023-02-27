@@ -11,9 +11,10 @@ const solc = require("solc")
 const {wasm: wasmTester} = require("./vendors/circom_tester")
 
 export class Circuit {
-    _circuitConfig: CircuitConfig;
-    _networks: Networks
-    _wasmTester: typeof wasmTester;
+    private _circuitConfig: CircuitConfig;
+    // @ts-ignore // TODO: Remove ts-ignore and use _networks variable in the file
+    private _networks: Networks
+    private _wasmTester: typeof wasmTester;
 
     constructor(circuitConfig: CircuitConfig, networks: Networks) {
         this._circuitConfig = circuitConfig;
@@ -53,6 +54,7 @@ export class Circuit {
             default:
                 return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
         }
+
     }
 
     async genProof(inp: any) {
@@ -83,6 +85,10 @@ export class Circuit {
             default:
                 return await verifyGroth16Proof(this._circuitConfig.vKeyPath, p)
         }
+    }
+
+    getOutputDIR(){
+        return this._circuitConfig.outputDir
     }
 
     async _deploySmartContractVerifier(networkName: string) {

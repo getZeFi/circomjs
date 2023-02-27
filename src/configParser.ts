@@ -1,22 +1,22 @@
 import * as fs from "fs";
 import * as path from "path";
 import log from "log";
-import { UserConfig, BuildCircuitInfo, CircuitConfig, Networks } from "./types";
+import { CFG, BuildCircuitInfo, CircuitConfig, Networks } from "./types";
 
 export class ConfigParser {
-  _fp: string;
-  _userConfig: UserConfig;
-  _idToCircuitCfg: Map<string, CircuitConfig>;
+  private _fp: string;
+  private _cfg: CFG;
+  private _idToCircuitCfg: Map<string, CircuitConfig>;
 
   constructor(cfgFp: string) {
     this._fp = path.resolve(cfgFp);
     this._idToCircuitCfg = new Map();
 
-    this._userConfig = this._parseAndValidate(this._fp);
+    this._cfg = this._parseAndValidate(this._fp);
     this._prepareIdToCircuitCfg();
   }
 
-  _parseAndValidate(fp: string): UserConfig {
+  private _parseAndValidate(fp: string): CFG {
     log.info("reading config, path:", fp);
 
     try {
@@ -28,7 +28,7 @@ export class ConfigParser {
 
       const cfgBuff = fs.readFileSync(fp);
 
-      const parsedConfig: UserConfig = JSON.parse(cfgBuff.toString());
+      const parsedConfig: CFG = JSON.parse(cfgBuff.toString());
 
       if (!parsedConfig) {
         throw new Error(`Config parsing failed, filepath:${this._fp}`);
@@ -75,7 +75,7 @@ export class ConfigParser {
     }
   }
 
-  _areCircuitsValid(config: UserConfig): string {
+  private _areCircuitsValid(config: CFG): string {
     let cIDListSoFar = Object.create(null);
     const circuitList = config.build?.circuits;
     const {
@@ -115,13 +115,13 @@ export class ConfigParser {
     return "";
   }
 
-  _getCircuitInputPath(inputDir: string, circuit: BuildCircuitInfo): string {
+  private _getCircuitInputPath(inputDir: string, circuit: BuildCircuitInfo): string {
     return path.join(inputDir, `${circuit.fileName}`);
   }
 
-  _prepareIdToCircuitCfg() {
-    const { outputDir } = this._userConfig;
-    const { inputDir, circuits } = this._userConfig.build;
+  private _prepareIdToCircuitCfg() {
+    const { outputDir } = this._cfg;
+    const { inputDir, circuits } = this._cfg.build;
 
     circuits.forEach((c: BuildCircuitInfo) => {
       const cktName = this._getCircuitName(c.fileName);
@@ -134,7 +134,7 @@ export class ConfigParser {
         inputFilePath: this._getCircuitInputPath(inputDir, c),
         outputDir: cktOutputDir,
         powerOfTauFp: path.resolve(
-          c.powerOfTauFp ? c.powerOfTauFp : "./circuits/power_of_tau.ptau" // Calculate total constraints from r1cs file, and download it
+          c.powerOfTauFp ? c.powerOfTauFp : path.join(inputDir, `power_of_tau.ptau`) // Calculate total constraints from r1cs file, and download it
         ),
         // This is not used since circom spits the output files in a fixed dir structure. It is here for consistency.
         jsPath: path.join(cktOutputDir, `${cktName}_js`),
@@ -157,7 +157,7 @@ export class ConfigParser {
     });
   }
 
-  _getCircuitName(fileName: string) {
+  private _getCircuitName(fileName: string) {
     return fileName.split(".")[0];
   }
 
@@ -173,6 +173,10 @@ export class ConfigParser {
   }
 
   getNetworks(): Networks {
-    return this._userConfig.networks;
+    return this._cfg.networks;
+  }
+
+  getCFG(){
+    return this._cfg
   }
 }
