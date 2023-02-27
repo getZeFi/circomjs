@@ -49,10 +49,7 @@ describe("Circuit test", () => {
     const circuit = c.getCircuit("mul");
     await circuit.compile();
     await circuit.genZKey();
-    const zKeyFinalPath = path.join(
-      circuit._circuitConfig.outputDir,
-      "circuit_final.zkey"
-    );
+    const zKeyFinalPath = path.join(circuit.getOutputDIR(),"circuit_final.zkey");
 
     const isZKeyCreated = fs.existsSync(zKeyFinalPath);
     expect(isZKeyCreated).toBe(true);
@@ -101,8 +98,8 @@ describe("Circuit test", () => {
     await circuit.genVKey();
 
     const vKeyPath = path.join(
-      circuit._circuitConfig.outputDir,
-      "verification_key.json"
+        circuit.getOutputDIR(),
+        "verification_key.json"
     );
 
     const vKeyObject = JSON.parse(fs.readFileSync(vKeyPath, "utf8"));

@@ -41,7 +41,7 @@ describe("ConfigParser test", () => {
         }`;
     fs.writeFileSync(configPath, jsonConfig);
     const cfgparser = new ConfigParser(configPath);
-    expect(cfgparser._userConfig).toEqual(JSON.parse(jsonConfig));
+    expect(cfgparser.getCFG()).toEqual(JSON.parse(jsonConfig));
     fs.rmSync(configPath);
   });
 

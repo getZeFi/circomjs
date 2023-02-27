@@ -54,6 +54,7 @@ export class Circuit {
             default:
                 return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
         }
+
     }
 
     async genProof(inp: any) {
@@ -84,6 +85,10 @@ export class Circuit {
             default:
                 return await verifyGroth16Proof(this._circuitConfig.vKeyPath, p)
         }
+    }
+
+    getOutputDIR(){
+        return this._circuitConfig.outputDir
     }
 
     async _deploySmartContractVerifier(networkName: string) {

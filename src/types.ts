@@ -3,7 +3,7 @@ export interface CircuitCircomTester {
     checkConstraints(w: any): Promise<void>
 }
 
-export type UserConfig = {
+export type CFG = {
     projectName:string,
     outputDir:string,
     build: {
