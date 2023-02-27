@@ -24,10 +24,12 @@ export type BuildCircuitInfo = {
 export type CompilationMode = "wasm" | "c"
 
 export type Networks = {
-    [key in string]: {
+    [key in string]: NetworkCFG
+}
+
+export type NetworkCFG = {
         RPC: string,
         PRIV_KEY: string
-    }
 }
 
 export type Witness = Array<bigint>

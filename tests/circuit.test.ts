@@ -3,6 +3,10 @@ import * as path from "path";
 
 import CircomJS from "../src/circomJs";
 import { ZK_PROOF } from "../src/types";
+import {groth16VerifierAddress} from "../src/utils/data";
+
+require("dotenv").config({path:path.resolve(__dirname, "./.env")})
+
 
 const testConfigPath = `tests/data/circuitTestConfig.json`;
 const jsonConfig = `
@@ -30,9 +34,13 @@ const jsonConfig = `
          ]
        },
   "networks": {
-    "delhi" : {
-      "RPC": "http://url:8080/v1/2323 ",
-      "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
+    "goerli": {
+      "RPC": "${process.env.GOERLI_RPC}",
+      "PRIV_KEY": "${process.env.PRIV_KEY}"
+    },
+    "mumbai": {
+      "RPC": "${process.env.MUMBAI_RPC}",
+      "PRIV_KEY": "${process.env.PRIV_KEY}"
     }
   }
 }
@@ -129,6 +137,28 @@ describe("Circuit test", () => {
 
     expect(verificationRes).toBe(true);
   }, 30000);
+
+  it("should deploy smart contract verifier", async () => {
+    const c = new CircomJS(testConfigPath);
+
+    const circuit = c.getCircuit("mul");
+    const contractAddress =  await circuit.deploySmartContractVerifier("mumbai");
+    expect(contractAddress).toBeTruthy()
+    console.log(contractAddress)
+  }, 300000);
+
+  it("should check verification on chain", async()=>{
+    const c = new CircomJS(testConfigPath)
+    const input = { x: 3, y: 2 };
+
+    // Groth
+    const circuit = c.getCircuit("mul");
+    circuit.compile()
+    circuit.genZKey()
+    const proof = await circuit.genProof(input)
+    const res = await circuit.verifyProofOnChain(proof, groth16VerifierAddress,"mumbai" )
+    expect(res).toBe(true)
+  });
 
   afterAll(() => {
     fs.rmSync(testConfigPath);

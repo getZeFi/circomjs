@@ -1,0 +1,34 @@
+{
+"projectName": "multiplication_circuits",
+"outputDir": "./tests/data/out",
+"build" :
+{
+"inputDir": "tests/data/circuits",
+"circuits": [
+{
+"cID": "mul",
+"fileName": "circuit2.circom",
+"proofType": "groth16",
+"compilationMode": "wasm",
+"powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+},
+{
+"cID": "circ1000constraints",
+"fileName": "circ1000constraints.circom",
+"proofType": "plonk",
+"compilationMode": "wasm",
+"powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+}
+]
+},
+"networks": {
+"goerli": {
+"RPC": "${process.env.GOERLI_RPC}",
+"PRIV_KEY": "${process.env.PRIV_KEY}"
+},
+"mumbai": {
+"RPC": "${process.env.MUMBAI_RPC}",
+"PRIV_KEY": "${process.env.PRIV_KEY}"
+}
+}
+}

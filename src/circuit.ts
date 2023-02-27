@@ -1,14 +1,20 @@
-import {ContractFactory, JsonRpcProvider} from "ethers";
+import * as path from "path";
+import log from "log"
+import * as fs from "fs";
+
+const {wasm: wasmTester} = require("./vendors/circom_tester")
 
 import {CircuitConfig, Networks, Witness, ZK_PROOF} from "./types";
 import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
 import {genGroth16Proof, genPlonkProof, verifyGroth16Proof, verifyPlonkProof} from "./utils/proof";
-import {getSolidityVerifier} from "./utils/verifier";
-import * as path from "path";
-
-const log = require("log")
-const solc = require("solc")
-const {wasm: wasmTester} = require("./vendors/circom_tester")
+import {
+    deploySolidityVerifier,
+    getGroth16SolidityCallData,
+    getPlonkSolidityCallData,
+    getSolidityVerifierCode, getVerifierContract
+} from "./utils/verifier";
+import {grothVerifierABI, plonkVerifierABI} from "./utils/data";
+import {Contract} from "ethers";
 
 export class Circuit {
     private _circuitConfig: CircuitConfig;
@@ -91,40 +97,76 @@ export class Circuit {
         return this._circuitConfig.outputDir
     }
 
-    async _deploySmartContractVerifier(networkName: string) {
-        const verifierCode = await getSolidityVerifier(this._circuitConfig.zKeyPath)
+    async deploySmartContractVerifier(networkName: string) {
 
-        const inp = {
-            language: 'Solidity',
-            sources: {
-                'verifier.sol': {
-                    content: verifierCode,
-                }
-            },
-            settings: {
-                outputSelection: {
-                    '*': {
-                        '*': ['*']
-                    }
-                }
+        if(typeof this._networks[networkName] === "undefined"){
+            throw new Error(`cannot find network by the name ${networkName} in config file`)
+        }
+
+        // pass -> circuit's zkey has not been generated yet
+        if(!fs.existsSync(this._circuitConfig.zKeyPath)){
+            // pass -> circuit hasn't been compiled yet
+            if(!fs.existsSync(this.getOutputDIR())){
+                this.compile()
             }
-        };
+            this.genZKey()
+        }
 
-        let c = JSON.parse(await solc.compile(JSON.stringify(inp)))
-        let {abi, evm} = c.contracts["verifier.sol"]["Verifier"]
-        abi = JSON.stringify(abi)
-        const bytecode = "0x" + evm.bytecode.object
+        const verifierCode = await getSolidityVerifierCode(this._circuitConfig.zKeyPath)
+        const {RPC: rpcURL, PRIV_KEY: privKey} = this._networks[networkName]
+        const contractAddress = await deploySolidityVerifier(verifierCode, rpcURL, privKey, this._circuitConfig.compileOptions.snarkType)
 
-        // const provider = new JsonRpcProvider(this._networks[networkName].RPC)
-        // const signer =  new Wallet(this._networks[networkName].PRIV_KEY, provider)
-        const provider = new JsonRpcProvider()
-        const signer = await provider.getSigner(0)
-        const cFactory = new ContractFactory(abi, bytecode, signer)
+        return contractAddress
+    }
 
-        const txReceipt = await cFactory.deploy()
-        await txReceipt.waitForDeployment()
 
-        const contractAddresss = await txReceipt.getAddress()
-        return contractAddresss
+    async verifyProofOnChain(p: ZK_PROOF, verifierAddress: string, networkName: string): Promise<boolean> {
+        if(typeof this._networks[networkName] === "undefined"){
+            throw new Error(`cannot find network by the name ${networkName} in config file`)
+        }
+
+        const callData = await this.getSolidityCallData(p)
+        const {RPC: rpcURL} = this._networks[networkName]
+        let contract: Contract
+
+        switch (p.proof.protocol){
+            case "plonk":
+                contract = getVerifierContract({address: verifierAddress, abi:plonkVerifierABI, rpc: rpcURL})
+                break;
+            case "groth16":
+                contract = getVerifierContract({address: verifierAddress, abi: grothVerifierABI, rpc: rpcURL})
+                break;
+            default:
+                throw new Error(`protocol ${p.proof.protocol} not supported`)
+        }
+
+        return await contract.verifyProof(...callDataToContractArgs(callData, p.proof.protocol))
+    }
+
+    getSolidityCallData(p: ZK_PROOF): Promise<string> {
+        switch (p.proof.protocol){
+            case "plonk":
+                return getPlonkSolidityCallData(p)
+            case "groth16":
+                return getGroth16SolidityCallData(p)
+            default:
+                throw new Error(`protocol ${p.proof.protocol} not supported`)
+        }
+    }
+}
+
+const callDataToContractArgs = (callData:string, protocol: string) => {
+    switch (protocol){
+        case "groth16":
+            return JSON.parse(`[${callData}]`)
+            break;
+        case "plonk":
+            const l = callData.split(",")
+            const proof = l[0]
+            const pubSingals = JSON.parse(l[1])
+            return [proof, pubSingals]
+            break;
+        default:
+            throw new Error(`protocl ${protocol} not supported`)
     }
 }
