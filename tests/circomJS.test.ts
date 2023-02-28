@@ -50,8 +50,7 @@ describe("CircomJS test", () => {
   it("should get circuit from cID", () => {
     const c = new CircomJS(testConfigPath);
 
-    const cIDToCircuitsMap = c.getCidToCircuit;
-    const cIDList = Array.from( cIDToCircuitsMap.keys() )
+    const cIDList = c.getCIDs()
     
     cIDList.forEach((cID) => {
       const circuit = c.getCircuit(cID);

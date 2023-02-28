@@ -54,8 +54,7 @@ describe("Circuit test", () => {
   it("should generate zKey", async () => {
     const c = new CircomJS(testConfigPath);
 
-    const cIDToCircuitsMap = c.getCidToCircuit;
-    const cIDList = Array.from(cIDToCircuitsMap.keys());
+    const cIDList = c.getCIDs()
 
     cIDList.forEach(async (cID) => {
       const circuit = c.getCircuit(cID);

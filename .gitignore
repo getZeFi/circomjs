@@ -85,7 +85,7 @@ tests/.env
 
 # Next.js build output
 .next
-# out
+# out1
 
 # Nuxt.js build / generate output
 .nuxt

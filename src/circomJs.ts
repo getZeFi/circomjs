@@ -17,8 +17,9 @@ export default class CircomJS {
         })
     }
 
-    get getCidToCircuit(): Map<string, Circuit> {
-        return this._cIdToCircuit;
+    getCIDs(): Array<string> {
+        const cIDToCircuitsMap = this._cIdToCircuit
+        return Array.from(cIDToCircuitsMap.keys());
     }
 
     getCircuit(cID: string): Circuit {
