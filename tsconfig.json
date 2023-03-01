@@ -1,25 +1,27 @@
-
 {
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
-    "preserveConstEnums": true,
-    "resolveJsonModule": true,
-
-    "target": "ES6",
-    "module": "commonjs",
     "declaration": true,
-    "sourceMap": true,
-    "outDir": "dist",
-    // "rootDir": "src",
-    "strict": true,
+    "declarationMap": true,
+    "declarationDir": "./types",
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
     "noImplicitAny": false,
-    "strictNullChecks": true,
+    "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    // "moduleResolution": "node",
-    "typeRoots": [ "node_modules/@types", "types" ],
-    "esModuleInterop": true,
+    "outDir": "dist",
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ES6",
+    "module": "CommonJS",
+    "typeRoots": [
+      "node_modules/@types",
+    ],
   },
-  "exclude": [ "node_modules", "test", "types" ]
+  "include": [
+    "./src/**/*.ts",
+  ]
 }
