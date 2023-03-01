@@ -18,7 +18,7 @@ describe("ConfigParser test", () => {
                  "circuits": [
                     {
                       "cID": "mul",
-                      "fileName": "circuit2.circom",
+                      "fileName": "testtemp/circuit2.circom",
                       "proofType": "groth16",
                       "compilationMode": "wasm",
                       "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
@@ -95,7 +95,7 @@ describe("ConfigParser test", () => {
                    "circuits": [
                       {
                         "cID": "mul",
-                        "fileName": "circuit2.circom",
+                        "fileName": "testtemp/circuit2.circom",
                         "proofType": "groth16",
                         "compilationMode": "wasm",
                         "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
@@ -193,7 +193,7 @@ describe("ConfigParser test", () => {
                "circuits": [
                   {
                     "cID": "mul",
-                    "fileName": "circuit2.circom",
+                    "fileName": "testtemp/circuit2.circom",
                     "proofType": "groth16",
                     "compilationMode": "wasm",
                     "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"

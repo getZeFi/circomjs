@@ -13,7 +13,7 @@ const jsonConfig = `
          "circuits": [
             {
               "cID": "mul",
-              "fileName": "circuit2.circom",
+              "fileName": "testtemp/circuit2.circom",
               "proofType": "groth16",
               "compilationMode": "wasm",
               "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
@@ -49,9 +49,13 @@ describe("CircomJS test", () => {
 
   it("should get circuit from cID", () => {
     const c = new CircomJS(testConfigPath);
-    const circuit = c.getCircuit("mul");
 
-    expect(circuit instanceof Circuit).toBe(true);
+    const cIDList = c.getCIDs()
+    
+    cIDList.forEach((cID) => {
+      const circuit = c.getCircuit(cID);
+      expect(circuit instanceof Circuit).toBe(true);
+    });
   });
 
   afterAll(() => {
