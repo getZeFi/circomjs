@@ -48,10 +48,6 @@ export class ConfigParser {
         throw new Error(
           `Field "circuits" is not present in config json, filepath:${this._fp}`
         );
-      } else if (!parsedConfig.networks) {
-        throw new Error(
-          `Field "networks" is not present in config json, filepath:${this._fp}`
-        );
       }
 
       const circuitsValidation = this._areCircuitsValid(parsedConfig);

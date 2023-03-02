@@ -26,13 +26,7 @@ const jsonConfig = `
              "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
            }
          ]
-       },
-  "networks": {
-    "delhi" : {
-      "RPC": "http://url:8080/v1/2323 ",
-      "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
-    }
-  }
+       }
 }
 `;
 

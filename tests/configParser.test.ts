@@ -31,13 +31,7 @@ describe("ConfigParser test", () => {
                      "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                    }
                  ]
-               },
-          "networks": {
-            "delhi" : {
-              "RPC": "http://url:8080/v1/2323 ",
-              "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
-            }
-          }
+               }
         }`;
     fs.writeFileSync(configPath, jsonConfig);
     const cfgparser = new ConfigParser(configPath);
@@ -108,13 +102,7 @@ describe("ConfigParser test", () => {
                        "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
                      }
                    ]
-                 },
-            "networks": {
-              "delhi" : {
-                "RPC": "http://url:8080/v1/2323 ",
-                "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
-              }
-            }
+                 }
           }`;
 
       fs.writeFileSync(configPath, jsonConfig);
@@ -180,43 +168,6 @@ describe("ConfigParser test", () => {
       fs.rmSync(configPath);
     });
 
-    it("should validate networks field exists", () => {
-      const configPath = `tests/data/${uuidv4()}.json`;
-
-      const jsonConfig = `
-      {
-        "projectName": "multiplication_circuits",
-        "outputDir": "./tests/data/out",
-         "build" :
-             {
-               "inputDir": "tests/data/circuits",
-               "circuits": [
-                  {
-                    "cID": "mul",
-                    "fileName": "testtemp/circuit2.circom",
-                    "proofType": "groth16",
-                    "compilationMode": "wasm",
-                    "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
-                  },
-                  {
-                    "cID": "circ1000constraints",
-                    "fileName": "circ1000constraints.circom",
-                    "proofType": "groth16",
-                    "compilationMode": "wasm",
-                    "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
-                  }
-                ]
-             }
-      }`;
-
-      fs.writeFileSync(configPath, jsonConfig);
-      expect(() => new ConfigParser(configPath)).toThrowError(
-        'Field "networks" is not present in config json'
-      );
-
-      fs.rmSync(configPath);
-    });
-
     it("should validate that circuits field is not empty", () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
@@ -227,12 +178,6 @@ describe("ConfigParser test", () => {
         "build" : {
           "inputDir": "tests/data/circuits",
           "circuits": []
-        },
-        "networks": {
-          "delhi" : {
-            "RPC": "http://url:8080/v1/2323 ",
-            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
-          }
         }
       }`;
 
@@ -269,13 +214,7 @@ describe("ConfigParser test", () => {
                 "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
-          },
-        "networks": {
-          "delhi" : {
-            "RPC": "http://url:8080/v1/2323 ",
-            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
-        }
       }`;
 
       fs.writeFileSync(configPath, jsonConfig);
@@ -311,13 +250,7 @@ describe("ConfigParser test", () => {
                 "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
-          },
-        "networks": {
-          "delhi" : {
-            "RPC": "http://url:8080/v1/2323 ",
-            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
-        }
       }`;
 
       fs.writeFileSync(configPath, jsonConfig);
@@ -354,13 +287,7 @@ describe("ConfigParser test", () => {
                 "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
-          },
-        "networks": {
-          "delhi" : {
-            "RPC": "http://url:8080/v1/2323 ",
-            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
-        }
       }`;
 
       fs.writeFileSync(configPath, jsonConfig);
@@ -397,13 +324,7 @@ describe("ConfigParser test", () => {
                 "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               }
             ]
-          },
-        "networks": {
-          "delhi" : {
-            "RPC": "http://url:8080/v1/2323 ",
-            "PRIV_KEY": "0xhfsnskndHJDbdsnskndHJDbds"
           }
-        }
       }`;
 
       fs.writeFileSync(configPath, jsonConfig);
