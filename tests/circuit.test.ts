@@ -46,7 +46,6 @@ describe("Circuit test", () => {
       const circuit = c.getCircuit(cID);
 
       await circuit.compile();
-      await circuit.genZKey();
       const zKeyFinalPath = path.join(
         circuit.getOutputDIR(),
         "circuit_final.zkey"
@@ -61,7 +60,6 @@ describe("Circuit test", () => {
     const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("mul");
     await circuit.compile();
-    await circuit.genZKey();
     const w = await circuit.calculateWitness({ x: 3, y: 2 });
     const testWitness = "1,6,3,2"; // For this cID and inputs, this should be the witness string
 
@@ -74,7 +72,6 @@ describe("Circuit test", () => {
     const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("mul");
     await circuit.compile();
-    await circuit.genZKey();
     await circuit.calculateWitness(input);
     const p = (await circuit.genProof(input)) as ZK_PROOF;
 
@@ -94,13 +91,10 @@ describe("Circuit test", () => {
     const circuit = c.getCircuit("mul");
 
     await circuit.compile();
-    await circuit.genZKey();
     await circuit.calculateWitness(input);
     await circuit.genProof(input);
-    await circuit.genVKey();
 
     const vKeyPath = path.join(circuit.getOutputDIR(), "verification_key.json");
-
     const vKeyObject = JSON.parse(fs.readFileSync(vKeyPath, "utf8"));
 
     expect(
@@ -120,10 +114,8 @@ describe("Circuit test", () => {
     const c = new CircomJS(testConfigPath);
     const circuit = c.getCircuit("circ1000constraints");
     await circuit.compile();
-    await circuit.genZKey();
     await circuit.calculateWitness(input);
     const p = (await circuit.genProof(input)) as ZK_PROOF;
-    await circuit.genVKey();
     const verificationRes = await circuit.verifyProof(p);
 
     expect(verificationRes).toBe(true);

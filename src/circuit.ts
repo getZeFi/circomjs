@@ -25,6 +25,9 @@ export class Circuit {
             output: this._circuitConfig.outputDir,
             ...this._circuitConfig.compileOptions
         })
+
+        await this._genZKey()
+        await this._genVKey()
     }
 
     calculateWitness(inp: any): Promise<Witness> {
@@ -37,7 +40,7 @@ export class Circuit {
         return this._wasmTester.checkConstraints(w)
     }
 
-    genZKey() {
+    private _genZKey() {
         log.info("generating zKey, ckt:%s, pTau:%s, zKey:%s",
             this._circuitConfig.cktName,
             this._circuitConfig.powerOfTauFp,
@@ -65,13 +68,13 @@ export class Circuit {
                 return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)        }
     }
 
-    async genVKey() {
+    private _genVKey() {
         log.info('generating verification key, zKey:%s, vKey:%s',
             this._circuitConfig.zKeyPath,
             this._circuitConfig.vKeyPath
 
         )
-        return await genVerificationKey(this._circuitConfig.zKeyPath, this._circuitConfig.vKeyPath)
+        return genVerificationKey(this._circuitConfig.zKeyPath, this._circuitConfig.vKeyPath)
     }
 
     async verifyProof(p: ZK_PROOF) {
