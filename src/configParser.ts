@@ -57,13 +57,19 @@ export class ConfigParser {
 
       // Check if ouput directory path is valid
       const outputDirectory = path.resolve(parsedConfig.outputDir);
-      try {
-        fs.accessSync(outputDirectory, fs.constants.W_OK);
-      } catch (err) {
-        throw new Error(
-          `Output directory is not writable. Please check outputDir in config json, filepath:${this._fp}`
-        );
-      }
+        if(!fs.existsSync(outputDirectory)){
+          fs.mkdirSync(outputDirectory, {recursive:true})
+        }
+        else {
+          try {
+          fs.accessSync(outputDirectory, fs.constants.W_OK);
+          }
+          catch (err) {
+            throw new Error(
+                `Output directory is not writable. Please check outputDir in config json, filepath:${this._fp}`
+            );
+          }
+        }
 
       return Object.assign({}, parsedConfig);
     } catch (err) {
