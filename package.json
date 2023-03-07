@@ -1,6 +1,6 @@
 {
   "name": "@zefi/circomjs",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Automating and easing workflow around developing in the Circom DSL",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
