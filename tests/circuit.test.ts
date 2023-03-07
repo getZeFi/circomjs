@@ -75,8 +75,6 @@ describe("Circuit test", () => {
     await circuit.calculateWitness(input);
     const p = (await circuit.genProof(input)) as ZK_PROOF;
 
-    fs.writeFileSync("./tmp.json", JSON.stringify(p))
-
     expect(
       p.hasOwnProperty("proof") &&
         p.proof.hasOwnProperty("pi_a") &&
