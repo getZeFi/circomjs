@@ -6,6 +6,7 @@ const {wasm: wasmTester} = require("./vendors/circom_tester")
 import {CircuitConfig, Networks, Witness, ZK_PROOF} from "./types";
 import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
 import {genGroth16Proof, genPlonkProof, verifyGroth16Proof, verifyPlonkProof} from "./utils/proof";
+import * as fs from "fs";
 
 export class Circuit {
     private _circuitConfig: CircuitConfig;
@@ -21,6 +22,10 @@ export class Circuit {
 
     async compile() {
         log.info('compiling circuit:%s, out1:%s', this._circuitConfig.inputFilePath, this._circuitConfig.outputDir)
+
+        if(!fs.existsSync(this._circuitConfig.outputDir)) {
+             fs.mkdirSync(this._circuitConfig.outputDir, {recursive:true})
+        }
 
         this._wasmTester = await wasmTester(this._circuitConfig.inputFilePath, {
             output: this._circuitConfig.outputDir,
