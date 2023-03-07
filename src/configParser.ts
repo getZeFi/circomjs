@@ -144,6 +144,7 @@ export class ConfigParser {
         wasmPath: path.join(cktOutputDir, `${cktName}_js`, `${cktName}.wasm`),
         zKeyPath: path.join(cktOutputDir, "circuit_final.zkey"), // DO NOT change the names
         vKeyPath: path.join(cktOutputDir, "verification_key.json"), // DO NOT change the names
+        r1csPath: path.join(cktOutputDir, `${cktName}.r1cs`),
         compileOptions: {
           include: [],
           snarkType: c.proofType ? c.proofType : "groth16",

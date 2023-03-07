@@ -121,6 +121,15 @@ describe("Circuit test", () => {
     expect(verificationRes).toBe(true);
   }, 30000);
 
+  it("should calculate total constraints in a circuit", async () => {
+    const c = new CircomJS(testConfigPath);
+    const n1 =await c.getCircuit("mul").getTotalConstraints()
+    const n1000 =await c.getCircuit("circ1000constraints").getTotalConstraints()
+
+    expect(n1).toEqual(1)
+    expect(n1000).toEqual(1001)
+  })
+
   afterAll(() => {
     fs.rmSync(testConfigPath);
   });
