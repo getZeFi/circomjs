@@ -1,11 +1,12 @@
 import {ConfigParser} from './configParser'
 import {Circuit} from "./circuit";
+import path from "path";
 
 export default class CircomJS {
     private _configParser: ConfigParser;
     private _cIdToCircuit: Map<string, Circuit>;
 
-    constructor(configFilePath = "./circuit.config.json") {
+    constructor(configFilePath =  path.resolve(process.cwd(),"./circuit.config.json")){
         this._configParser = new ConfigParser(configFilePath);
         this._cIdToCircuit = new Map<string, Circuit>();
 

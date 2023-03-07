@@ -21,6 +21,7 @@ export class Circuit {
 
     async compile() {
         log.info('compiling circuit:%s, out1:%s', this._circuitConfig.inputFilePath, this._circuitConfig.outputDir)
+
         this._wasmTester = await wasmTester(this._circuitConfig.inputFilePath, {
             output: this._circuitConfig.outputDir,
             ...this._circuitConfig.compileOptions
