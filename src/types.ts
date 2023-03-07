@@ -64,7 +64,8 @@ export type CircuitConfig = {
     wasmPath: string;
     zKeyPath: string;
     vKeyPath: string;
-    compileOptions: CompileOptions
+    compileOptions: CompileOptions;
+    r1csPath:string
 }
 
 export type CompileOptions = {
@@ -77,4 +78,8 @@ export type CompileOptions = {
     prime: number | boolean;
     O: number;
     verbose: boolean;
+}
+
+export type R1CSInfo = {
+
 }

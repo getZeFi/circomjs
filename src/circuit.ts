@@ -7,6 +7,7 @@ import {CircuitConfig, Networks, Witness, ZK_PROOF} from "./types";
 import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
 import {genGroth16Proof, genPlonkProof, verifyGroth16Proof, verifyPlonkProof} from "./utils/proof";
 import * as fs from "fs";
+import {getTotalConstraints} from "./utils/r1cs";
 
 export class Circuit {
     private _circuitConfig: CircuitConfig;
@@ -44,6 +45,14 @@ export class Circuit {
     checkConstraints(w: any): Promise<void> {
         // throws if there is an error
         return this._wasmTester.checkConstraints(w)
+    }
+
+    async getTotalConstraints(): Promise<number>{
+        if(!fs.existsSync(this._circuitConfig.r1csPath)){
+            await this.compile()
+        }
+
+        return getTotalConstraints(this._circuitConfig.r1csPath)
     }
 
     private _genZKey() {
