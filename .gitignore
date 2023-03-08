@@ -132,3 +132,7 @@ dist
 # build files
 dist
 types
+
+# IDE
+.idea
+.vscode
