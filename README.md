@@ -14,7 +14,7 @@ CircomJS gives you the following capabilities in Javascript!
 ### Compile your circuits
 
 ```javascript
-const {CircomJS} = require("circomjs")
+const {CircomJS} = require("@zefi/circomjs")
 
 const main = async() => {
     const circomjs = new CircomJS()
@@ -30,7 +30,7 @@ main()
 ### Generate Proofs
 
 ```javascript
-const {CircomJS} = require("circomjs")
+const {CircomJS} = require("@zefi/circomjs")
 
 const main = async() => {
     const circomjs = new CircomJS()
@@ -54,7 +54,7 @@ main()
 ### Verify proofs
 
 ```javascript
-const {CircomJS} = require("circomjs")
+const {CircomJS} = require("@zefi/circomjs")
 
 const main = async() => {
     const circomjs = new CircomJS()
