@@ -1,7 +1,7 @@
 # CIRCOMJS
 CircomJS is a javascript framework for automating and easing workflow around developing in the [Circom](https://docs.circom.io) DSL.
 
-**We would suggest getting started with this [gitbook](https://zefi.gitbook.io/circomjs), and you should also checkout our [blog post](todo) on why we made CircomJS.**
+**We would suggest getting started with this [gitbook](https://zefi.gitbook.io/circomjs), and you should also checkout our [blog post](https://medium.com/zefihq/presenting-circomjs-54f476c075c4) on why we made CircomJS.**
 
 The framework operates on a simple [circuit.config.js](https://zefi.gitbook.io/circomjs/circuit-config-file/circuit-config-file) file, which is a configuration file for circomJS.
 
