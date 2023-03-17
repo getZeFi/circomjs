@@ -20,15 +20,13 @@ describe("ConfigParser test", () => {
                       "cID": "mul",
                       "fileName": "testtemp/circuit2.circom",
                       "proofType": "groth16",
-                      "compilationMode": "wasm",
-                      "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                      "compilationMode": "wasm"
                    },
                    {
                      "cID": "circ1000constraints",
                      "fileName": "circ1000constraints.circom",
                      "proofType": "groth16",
-                     "compilationMode": "wasm",
-                     "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                     "compilationMode": "wasm"
                    }
                  ]
                }
@@ -91,15 +89,13 @@ describe("ConfigParser test", () => {
                         "cID": "mul",
                         "fileName": "testtemp/circuit2.circom",
                         "proofType": "groth16",
-                        "compilationMode": "wasm",
-                        "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                        "compilationMode": "wasm"
                      },
                      {
                        "cID": "circ1000constraints",
                        "fileName": "circ1000constraints.circom",
                        "proofType": "groth16",
-                       "compilationMode": "wasm",
-                       "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                       "compilationMode": "wasm"
                      }
                    ]
                  }
@@ -203,15 +199,13 @@ describe("ConfigParser test", () => {
               {
                 "cID": "mul",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               }
             ]
           }
@@ -239,15 +233,13 @@ describe("ConfigParser test", () => {
               {
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               }
             ]
           }
@@ -276,15 +268,13 @@ describe("ConfigParser test", () => {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               },
               {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               }
             ]
           }
@@ -313,15 +303,13 @@ describe("ConfigParser test", () => {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               },
               {
                 "cID": "circ1000constraints",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm",
-                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+                "compilationMode": "wasm"
               }
             ]
           }
