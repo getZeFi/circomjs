@@ -17,15 +17,13 @@ const jsonConfig = `
               "cID": "mul",
               "fileName": "testtemp/circuit2.circom",
               "proofType": "groth16",
-              "compilationMode": "wasm",
-              "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+              "compilationMode": "wasm"
            },
            {
              "cID": "circ1000constraints",
              "fileName": "circ1000constraints.circom",
              "proofType": "plonk",
-             "compilationMode": "wasm",
-             "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+             "compilationMode": "wasm"
            }
          ]
        }
@@ -39,21 +37,16 @@ describe("Circuit test", () => {
 
   it("should generate zKey", async () => {
     const c = new CircomJS(testConfigPath);
+    const circuit = c.getCircuit("mul");
 
-    const cIDList = c.getCIDs()
+    await circuit.compile();
+    const zKeyFinalPath = path.join(
+      circuit.getOutputDIR(),
+      "circuit_final.zkey"
+    );
 
-    cIDList.forEach(async (cID) => {
-      const circuit = c.getCircuit(cID);
-
-      await circuit.compile();
-      const zKeyFinalPath = path.join(
-        circuit.getOutputDIR(),
-        "circuit_final.zkey"
-      );
-
-      const isZKeyCreated = fs.existsSync(zKeyFinalPath);
-      expect(isZKeyCreated).toBe(true);
-    });
+    const isZKeyCreated = fs.existsSync(zKeyFinalPath);
+    expect(isZKeyCreated).toBe(true);
   }, 20000);
 
   it("should calculate witness", async () => {

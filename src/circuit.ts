@@ -8,7 +8,7 @@ import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
 import {genGroth16Proof, genPlonkProof, verifyGroth16Proof, verifyPlonkProof} from "./utils/proof";
 import * as fs from "fs";
 import {getTotalConstraints} from "./utils/r1cs";
-
+import https from 'https';
 export class Circuit {
     private _circuitConfig: CircuitConfig;
     // @ts-ignore // TODO: Remove ts-ignore and use _networks variable in the file
@@ -33,6 +33,7 @@ export class Circuit {
             ...this._circuitConfig.compileOptions
         })
 
+        await this.downloadPowerOfTauFile()
         await this._genZKey()
         await this._genVKey()
     }
@@ -53,6 +54,33 @@ export class Circuit {
         }
 
         return getTotalConstraints(this._circuitConfig.r1csPath)
+    }
+
+    async downloadFileOverHttp (fileUrl, outputPath) {
+        
+        const file = fs.createWriteStream(outputPath);
+        return new Promise((resolve, reject) => {
+            https.get(fileUrl, function(response) {
+                response.pipe(file);
+
+                file.on("finish", () => {
+                    file.close();
+                    resolve(true)
+                });
+            });
+        })
+    }
+ 
+    async downloadPowerOfTauFile(){
+        // TODO: this url should be generated according to the total constraints
+        const tauFileUrl = "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_14.ptau"
+
+        try{
+            const localTaufilePath = path.resolve(this._circuitConfig.outputDir, `power_of_tau.ptau`)
+            await this.downloadFileOverHttp(tauFileUrl, localTaufilePath)
+        } catch(err){
+            console.log("Tau File Download Error: ", err)
+        }
     }
 
     private _genZKey() {

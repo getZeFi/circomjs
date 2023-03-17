@@ -136,7 +136,7 @@ export class ConfigParser {
         inputFilePath: this._getCircuitInputPath(inputDir, c),
         outputDir: cktOutputDir,
         powerOfTauFp: path.resolve(
-          c.powerOfTauFp ? c.powerOfTauFp : path.join(inputDir, `power_of_tau.ptau`) // Calculate total constraints from r1cs file, and download it
+          path.join(cktOutputDir, `power_of_tau.ptau`) // Calculate total constraints from r1cs file, and download it
         ),
         // This is not used since circom spits the output files in a fixed dir structure. It is here for consistency.
         jsPath: path.join(cktOutputDir, `${cktName}_js`),
