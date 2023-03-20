@@ -21,7 +21,7 @@ export class Circuit {
         this._wasmTester = undefined;
     }
 
-    async compile() {
+    private async _compile() {
         log.info('compiling circuit:%s, out1:%s', this._circuitConfig.inputFilePath, this._circuitConfig.outputDir)
 
         if(!fs.existsSync(this._circuitConfig.outputDir)) {
@@ -33,7 +33,15 @@ export class Circuit {
             ...this._circuitConfig.compileOptions
         })
 
-        await this.downloadPowerOfTauFile()
+       
+    }
+
+    async compile() {
+        this._compile()
+  
+        if(!this._circuitConfig.isTauFileGiven){
+            await this.downloadPowerOfTauFile()
+        }
         await this._genZKey()
         await this._genVKey()
     }
@@ -50,14 +58,15 @@ export class Circuit {
 
     async getTotalConstraints(): Promise<number>{
         if(!fs.existsSync(this._circuitConfig.r1csPath)){
-            await this.compile()
+            await this._compile()
         }
 
         return getTotalConstraints(this._circuitConfig.r1csPath)
     }
 
     async downloadFileOverHttp (fileUrl, outputPath) {
-        
+        log.info('Downloading File: %s', fileUrl)
+
         const file = fs.createWriteStream(outputPath);
         return new Promise((resolve, reject) => {
             https.get(fileUrl, function(response) {
@@ -70,10 +79,52 @@ export class Circuit {
             });
         })
     }
+
+    getTauFileUrlByConstraints (c: number):string {
+        let url = ""
+
+        const tauRangeMap ={
+            256: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_08.ptau",
+            512: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_09.ptau",
+            1000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_10.ptau",
+            2000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_11.ptau",
+            4000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_12.ptau",
+            8000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_13.ptau",
+            16000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_14.ptau",
+            32000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_15.ptau",
+            64000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_16.ptau",
+            128000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_17.ptau",
+            256000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_18.ptau",
+            512000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_19.ptau",
+            1000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_20.ptau",
+            2000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_21.ptau",
+            4000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_22.ptau",
+            8000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_23.ptau",
+            16000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_24.ptau",
+            32000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_25.ptau",
+            64000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_26.ptau",
+            128000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_27.ptau",
+            256000000: "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final.ptau",
+        }
+
+        for (var key in tauRangeMap) {
+            if (Object.prototype.hasOwnProperty.call(tauRangeMap, key)) {
+                if(c <= (parseInt(key))) {
+                    url = tauRangeMap[key]
+                    break;
+                }
+            }
+        }
+
+        return url
+    }
  
     async downloadPowerOfTauFile(){
-        // TODO: this url should be generated according to the total constraints
-        const tauFileUrl = "https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_14.ptau"
+        const totalConstraints = await this.getTotalConstraints()
+
+        log.info('TotalConstraints: %s', totalConstraints)
+
+        const tauFileUrl = this.getTauFileUrlByConstraints(totalConstraints)
 
         try{
             const localTaufilePath = path.resolve(this._circuitConfig.outputDir, `power_of_tau.ptau`)

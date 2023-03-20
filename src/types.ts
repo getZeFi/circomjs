@@ -59,6 +59,7 @@ export type CircuitConfig = {
     cktName: string;
     inputFilePath: string;
     outputDir: string;
+    isTauFileGiven: boolean;
     powerOfTauFp: string;
     jsPath: string;
     wasmPath: string;

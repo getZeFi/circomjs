@@ -303,7 +303,8 @@ describe("ConfigParser test", () => {
                 "cID": "mul",
                 "fileName": "circ1000constraints.circom",
                 "proofType": "groth16",
-                "compilationMode": "wasm"
+                "compilationMode": "wasm",
+                "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
               },
               {
                 "cID": "circ1000constraints",
