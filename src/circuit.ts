@@ -120,14 +120,32 @@ export class Circuit {
     }
  
     async downloadPowerOfTauFile(){
+        const tauFolderPath =  this._circuitConfig.outputDir + '/tau'
+
+        // tau folder will be created if it doesn't exist
+        if(!fs.existsSync(tauFolderPath)) {
+            fs.mkdirSync(tauFolderPath, {recursive:true})
+        }
+
+        // get tau file url according to total constraints
         const totalConstraints = await this.getTotalConstraints()
-
         log.info('TotalConstraints: %s', totalConstraints)
-
         const tauFileUrl = this.getTauFileUrlByConstraints(totalConstraints)
 
+        // creating tau file name according to total constraints
+        let stringSplit = tauFileUrl.split("/")
+        let tauFileName = stringSplit[stringSplit.length - 1]
+        const localTaufilePath = path.resolve(tauFolderPath, tauFileName)
+
+        // change tau file path to the new file path
+        this._circuitConfig.powerOfTauFp = localTaufilePath
+       
+        // if the same tau file is already present, then return
+        if (fs.existsSync(tauFolderPath + "/" + tauFileName)) {
+            return
+        }
+
         try{
-            const localTaufilePath = path.resolve(this._circuitConfig.outputDir, `power_of_tau.ptau`)
             await this.downloadFileOverHttp(tauFileUrl, localTaufilePath)
         } catch(err){
             console.log("Tau File Download Error: ", err)
