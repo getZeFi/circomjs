@@ -37,9 +37,9 @@ export class Circuit {
     }
 
     async compile() {
-        this._compile()
+        await this._compile()
   
-        if(!this._circuitConfig.isTauFileGiven){
+        if(!this._circuitConfig.powerOfTauFp || this._circuitConfig.powerOfTauFp.length < 1){
             await this.downloadPowerOfTauFile()
         }
         await this._genZKey()
@@ -148,7 +148,7 @@ export class Circuit {
         try{
             await this.downloadFileOverHttp(tauFileUrl, localTaufilePath)
         } catch(err){
-            console.log("Tau File Download Error: ", err)
+            log.error("Tau File Download Error: ", err)
         }
     }
 

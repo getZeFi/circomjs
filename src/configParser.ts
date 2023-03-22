@@ -135,11 +135,8 @@ export class ConfigParser {
         cktName: cktName,
         inputFilePath: this._getCircuitInputPath(inputDir, c),
         outputDir: cktOutputDir,
-        isTauFileGiven: c.powerOfTauFp? true: false,
-        powerOfTauFp: path.resolve(
-          c.powerOfTauFp ? c.powerOfTauFp : path.join(cktOutputDir, `power_of_tau.ptau`)
-           // Calculate total constraints from r1cs file, and download it
-        ),
+        // powerOfTau file is dowloaded according to the total constraints and this powerOfTauFp is assigned in downloadPowerOfTauFile function
+        powerOfTauFp: c.powerOfTauFp ? path.resolve(c.powerOfTauFp) : '',
         // This is not used since circom spits the output files in a fixed dir structure. It is here for consistency.
         jsPath: path.join(cktOutputDir, `${cktName}_js`),
         // This is here for consistency. It is not used but the output of wasm file in same as wasmPath.
