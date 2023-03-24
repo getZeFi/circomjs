@@ -136,3 +136,6 @@ types
 # IDE
 .idea
 .vscode
+
+#out folder of tests
+tests/data/out
