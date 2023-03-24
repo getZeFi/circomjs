@@ -105,8 +105,9 @@ export class Circuit {
                 const r1csFp = path.resolve(this._circuitConfig.outputDir, `${this._circuitConfig.cktName}.r1cs`)
                 return genPlonkZKey(r1csFp, this._circuitConfig.powerOfTauFp, this._circuitConfig.zKeyPath)
             case "groth16":
-            default:
                 return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
+            default:
+                throw new Error(`This proof type is not supported: ${this._circuitConfig.compileOptions.snarkType}`);
         }
 
     }
@@ -118,8 +119,10 @@ export class Circuit {
             case "plonk":
                 return await genPlonkProof(inp, wasmPath, this._circuitConfig.zKeyPath)
             case "groth16":
+                return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)        
             default:
-                return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)        }
+                throw new Error(`This proof type is not supported: ${this._circuitConfig.compileOptions.snarkType}`);
+        }    
     }
 
     private _genVKey() {
@@ -136,8 +139,9 @@ export class Circuit {
             case "plonk":
                 return await verifyPlonkProof(this._circuitConfig.vKeyPath, p)
             case "groth16":
-            default:
                 return await verifyGroth16Proof(this._circuitConfig.vKeyPath, p)
+            default:
+                throw new Error(`This proof type is not supported: ${this._circuitConfig.compileOptions.snarkType}`);
         }
     }
 
