@@ -65,9 +65,9 @@ export class Circuit {
         return getTotalConstraints(this._circuitConfig.r1csPath)
     }
 
-
     private async _downloadPowerOfTauFile(){
         const tauFolderPath =  path.resolve(this._circuitConfig.outputDir, '../tau')
+
 
         if(!fs.existsSync(tauFolderPath)) {
             fs.mkdirSync(tauFolderPath, {recursive:true})
