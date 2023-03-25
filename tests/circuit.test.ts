@@ -18,7 +18,7 @@ const jsonConfig = `
               "fileName": "testtemp/circuit2.circom",
               "proofType": "groth16",
               "compilationMode": "wasm",
-              "powerOfTauFp": "./tests/data/out/powersOfTau28_hez_final_14.ptau"
+              "powerOfTauFp": "./tests/data/powersOfTau28_hez_final_14.ptau"
            },
            {
              "cID": "circ1000constraints",
