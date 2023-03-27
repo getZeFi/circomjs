@@ -288,6 +288,42 @@ describe("ConfigParser test", () => {
       fs.rmSync(configPath);
     });
 
+    it("should validate the proofType", () => {
+      const configPath = `tests/data/${uuidv4()}.json`;
+
+      const jsonConfig = `
+      {
+        "projectName": "multiplication_circuits",
+        "outputDir": "./tests/data/out",
+         "build" :
+             {
+               "inputDir": "tests/data/circuits",
+               "circuits": [
+                  {
+                    "cID": "mul",
+                    "fileName": "testtemp/circuit2.circom",
+                    "proofType": "someProofType",
+                    "compilationMode": "wasm"
+                 },
+                 {
+                   "cID": "circ1000constraints",
+                   "fileName": "circ1000constraints.circom",
+                   "proofType": "plonk",
+                   "compilationMode": "wasm"
+                 }
+               ]
+             }
+      }
+      `;
+
+      fs.writeFileSync(configPath, jsonConfig);
+      expect(() => new ConfigParser(configPath)).toThrowError(
+        `This proof type is not supported`
+      );
+
+      fs.rmSync(configPath);
+    });
+
     it("should validate that input file path exists", () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 

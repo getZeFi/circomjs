@@ -105,6 +105,11 @@ export class ConfigParser {
         return `Field "cID" is not unique in the circuits, File Path : ${this._fp}`;
       }
 
+      // Check for circuit proofType is valid
+      if (circuitList[i].proofType && circuitList[i].proofType !== 'groth16' && circuitList[i].proofType !== 'plonk') {
+        return `This proof type is not supported: ${circuitList[i].proofType}`;
+      }
+
       cIDListSoFar[currentID] = true;
 
       // Check if input path is valid
