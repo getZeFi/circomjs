@@ -106,8 +106,15 @@ export class ConfigParser {
       }
 
       // Check for circuit proofType is valid
-      if (circuitList[i].proofType && circuitList[i].proofType !== 'groth16' && circuitList[i].proofType !== 'plonk') {
-        return `This proof type is not supported: ${circuitList[i].proofType}`;
+      switch (circuitList[i].proofType) {
+        case undefined:
+          break;
+        case "plonk":
+          break;
+        case "groth16":
+          break;
+        default:
+          return `This proof type is not supported: ${circuitList[i].proofType}`;
       }
 
       cIDListSoFar[currentID] = true;
