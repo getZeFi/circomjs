@@ -114,7 +114,7 @@ export class ConfigParser {
         case "groth16":
           break;
         default:
-          return `This proof type is not supported: ${circuitList[i].proofType}`;
+          return `Proof type ${circuitList[i].proofType} is not supported`;
       }
 
       cIDListSoFar[currentID] = true;
