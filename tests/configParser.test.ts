@@ -324,6 +324,33 @@ describe("ConfigParser test", () => {
       fs.rmSync(configPath);
     });
 
+    it("should assign default proofType", () => {
+      const configPath = `tests/data/${uuidv4()}.json`;
+
+      const jsonConfig = `
+      {
+        "projectName": "multiplication_circuits",
+        "outputDir": "./tests/data/out",
+         "build" :
+             {
+               "inputDir": "tests/data/circuits",
+               "circuits": [
+                  {
+                    "cID": "mul",
+                    "fileName": "testtemp/circuit2.circom",
+                    "compilationMode": "wasm"
+                 }
+               ]
+             }
+      }
+      `;
+
+      fs.writeFileSync(configPath, jsonConfig);
+      const config = new ConfigParser(configPath).getCircuitConfigFromId("mul");
+      expect(config.compileOptions.snarkType).toBe("groth16");
+      fs.rmSync(configPath);
+    });
+
     it("should validate that input file path exists", () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
