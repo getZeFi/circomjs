@@ -107,7 +107,7 @@ export class Circuit {
             case "groth16":
                 return genGrothZKey(this._circuitConfig.outputDir, this._circuitConfig.cktName, this._circuitConfig.powerOfTauFp)
             default:
-                throw new Error(`This proof type is not supported: ${this._circuitConfig.compileOptions.snarkType}`);
+                throw new Error(`Proof type ${this._circuitConfig.compileOptions.snarkType} is not supported`);
         }
 
     }
@@ -121,7 +121,7 @@ export class Circuit {
             case "groth16":
                 return await genGroth16Proof(inp, wasmPath, this._circuitConfig.zKeyPath)        
             default:
-                throw new Error(`This proof type is not supported: ${this._circuitConfig.compileOptions.snarkType}`);
+                throw new Error(`Proof type ${this._circuitConfig.compileOptions.snarkType} is not supported`);
         }    
     }
 
@@ -141,7 +141,7 @@ export class Circuit {
             case "groth16":
                 return await verifyGroth16Proof(this._circuitConfig.vKeyPath, p)
             default:
-                throw new Error(`This proof type is not supported: ${this._circuitConfig.compileOptions.snarkType}`);
+                throw new Error(`Proof type ${this._circuitConfig.compileOptions.snarkType} is not supported`);
         }
     }
 

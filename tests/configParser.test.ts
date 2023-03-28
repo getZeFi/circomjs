@@ -318,7 +318,7 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        `This proof type is not supported`
+        /Proof type(.*)is not supported/
       );
 
       fs.rmSync(configPath);
