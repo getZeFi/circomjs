@@ -80,6 +80,6 @@ export type CompileOptions = {
     verbose: boolean;
 }
 
-export type R1CSInfo = {
-
+export type CircuitInput = {
+    [k : string]: string | number | bigint
 }
