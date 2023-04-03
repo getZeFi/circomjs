@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json && cp -r src/vendors dist/vendors",
     "clean": "rm -rf dist types",
-    "test": "echo 1"
+    "test": "jest"
   },
   "keywords": [
     "circom",
