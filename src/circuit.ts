@@ -3,7 +3,7 @@ import log from "log"
 
 const {wasm: wasmTester} = require("./vendors/circom_tester")
 
-import {CircuitConfig, Networks, Witness, ZK_PROOF} from "./types";
+import {CircuitConfig, CircuitInput, Networks, Witness, ZK_PROOF} from "./types";
 import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
 import {genGroth16Proof, genPlonkProof, verifyGroth16Proof, verifyPlonkProof} from "./utils/proof";
 import * as fs from "fs";
@@ -47,7 +47,7 @@ export class Circuit {
         await this._genVKey()
     }
 
-    calculateWitness(inp: any): Promise<Witness> {
+    calculateWitness(inp: CircuitInput): Promise<Witness> {
         log.info('calculating witness, wasm:%s, inp:', this._circuitConfig.outputDir, inp)
         return this._wasmTester.calculateWitness(inp)
     }
@@ -112,7 +112,7 @@ export class Circuit {
 
     }
 
-    async genProof(inp: any) {
+    async genProof(inp: CircuitInput) {
         const wasmPath = path.join(this._circuitConfig.outputDir, this._circuitConfig.cktName + '_js', this._circuitConfig.cktName + ".wasm")
         log.info('generating proof, wasm:%s, zKey:%s', wasmPath, this._circuitConfig.zKeyPath)
         switch (this._circuitConfig.compileOptions.snarkType) {
