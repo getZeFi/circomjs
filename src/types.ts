@@ -65,6 +65,7 @@ export type CircuitConfig = {
     zKeyPath: string;
     vKeyPath: string;
     compileOptions: CompileOptions;
+    compilationMode: CompilationMode;
     r1csPath:string
 }
 

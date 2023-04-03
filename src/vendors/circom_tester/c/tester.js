@@ -55,7 +55,7 @@ async function  c_tester(circomInput, _options) {
 	    assert(false,"Cannot set recompile to false if the "+jsPath+" folder does not exist");
 	}
     }
-    return new CTester(options.output, baseName, run);
+    return new CTester(options.output, baseName);
 }
 
 async function compile (baseName, fileName, options) {
@@ -76,9 +76,9 @@ async function compile (baseName, fileName, options) {
     if (options.O === 0) flags += "--O0 ";
     if (options.O === 1) flags += "--O1 ";
     if (options.verbose) flags += "--verbose ";
-
+    let b;
     try {
-	let b = await exec("circom " + flags + fileName);
+	b = await exec("circom " + flags + fileName);
 	if (options.verbose) {
             console.log(b.stdout);
 	}
@@ -95,10 +95,9 @@ async function compile (baseName, fileName, options) {
 
 class CTester {
 
-    constructor(dir, baseName, witnessCalculator) {
+    constructor(dir, baseName) {
         this.dir=dir;
         this.baseName = baseName;
-        this.witnessCalculator = witnessCalculator;
     }
 
     async release() {

@@ -2,6 +2,7 @@ import * as path from "path";
 import log from "log"
 
 const {wasm: wasmTester} = require("./vendors/circom_tester")
+const {c: cTester} = require("./vendors/circom_tester")
 
 import {CircuitConfig, Networks, Witness, ZK_PROOF} from "./types";
 import {genGrothZKey, genPlonkZKey, genVerificationKey} from "./utils/zKey";
@@ -30,11 +31,19 @@ export class Circuit {
              fs.mkdirSync(this._circuitConfig.outputDir, {recursive:true})
         }
 
-        this._wasmTester = await wasmTester(this._circuitConfig.inputFilePath, {
-            output: this._circuitConfig.outputDir,
-            ...this._circuitConfig.compileOptions
-        })
-
+        if(this._circuitConfig.compilationMode =='wasm'){
+            this._wasmTester = await wasmTester(this._circuitConfig.inputFilePath, {
+                output: this._circuitConfig.outputDir,
+                ...this._circuitConfig.compileOptions
+            })
+        } else if (this._circuitConfig.compilationMode =='c'){
+            this._wasmTester = await cTester(this._circuitConfig.inputFilePath, {
+                output: this._circuitConfig.outputDir,
+                ...this._circuitConfig.compileOptions
+            })           
+        }
+    
+       
     }
 
     async compile() {

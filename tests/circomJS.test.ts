@@ -22,7 +22,7 @@ const jsonConfig = `
              "cID": "circ1000constraints",
              "fileName": "circ1000constraints.circom",
              "proofType": "plonk",
-             "compilationMode": "wasm"
+             "compilationMode": "c"
            }
          ]
        }

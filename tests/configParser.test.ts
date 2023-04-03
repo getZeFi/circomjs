@@ -26,7 +26,7 @@ describe("ConfigParser test", () => {
                      "cID": "circ1000constraints",
                      "fileName": "circ1000constraints.circom",
                      "proofType": "groth16",
-                     "compilationMode": "wasm"
+                     "compilationMode": "c"
                    }
                  ]
                }
