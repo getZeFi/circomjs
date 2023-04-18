@@ -1,1 +1,1 @@
-export { default as CircomJS } from "./circomJs"
+export { default as CircomJS } from './circomJs';

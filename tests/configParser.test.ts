@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from "uuid";
-import * as fs from "fs";
+import { v4 as uuidv4 } from 'uuid';
+import * as fs from 'fs';
 
-import { ConfigParser } from "../src/configParser";
+import { ConfigParser } from '../src/configParser';
 
-describe("ConfigParser test", () => {
+describe('ConfigParser test', () => {
   beforeAll(async () => {});
 
-  it("should instantiate configparser successfully", () => {
+  it('should instantiate configparser successfully', () => {
     const configPath = `tests/data/${uuidv4()}.json`;
     const jsonConfig = `
         {
@@ -37,14 +37,14 @@ describe("ConfigParser test", () => {
     fs.rmSync(configPath);
   });
 
-  it("should throw a file doesnt exist error", () => {
+  it('should throw a file doesnt exist error', () => {
     const configPath = `tests/data/${uuidv4()}.json`;
     expect(() => new ConfigParser(configPath)).toThrow(
-      "ENOENT: no such file or directory"
+      'ENOENT: no such file or directory',
     );
   });
 
-  it("should validate JSON format", () => {
+  it('should validate JSON format', () => {
     const configPath = `tests/data/${uuidv4()}.json`;
 
     const jsonConfig = `
@@ -54,12 +54,12 @@ describe("ConfigParser test", () => {
       }`;
 
     fs.writeFileSync(configPath, jsonConfig);
-    expect(() => new ConfigParser(configPath)).toThrowError("Unexpected token");
+    expect(() => new ConfigParser(configPath)).toThrowError('Unexpected token');
     fs.rmSync(configPath);
   });
 
-  describe("Config JSON keys validations", () => {
-    it("should validate outputDir field exists", () => {
+  describe('Config JSON keys validations', () => {
+    it('should validate outputDir field exists', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -69,12 +69,12 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        'Field "outputDir" is not present in config json'
+        'Field "outputDir" is not present in config json',
       );
       fs.rmSync(configPath);
     });
 
-    it("should validate outputDir is writable", () => {
+    it('should validate outputDir is writable', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
       // Here, outputDir key should be pointing to the root folder "/" which is not writable
       const jsonConfig = `
@@ -103,12 +103,12 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        "Output directory is not writable"
+        'Output directory is not writable',
       );
       fs.rmSync(configPath);
     });
 
-    it("should validate build field exists", () => {
+    it('should validate build field exists', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -119,13 +119,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        'Field "build" is not present in config json'
+        'Field "build" is not present in config json',
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should validate inputDir field exists", () => {
+    it('should validate inputDir field exists', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -137,13 +137,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        'Field "inputDir" is not present in config json'
+        'Field "inputDir" is not present in config json',
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should validate circuits field exists", () => {
+    it('should validate circuits field exists', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -158,13 +158,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        'Field "circuits" is not present in config json'
+        'Field "circuits" is not present in config json',
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should validate that circuits field is not empty", () => {
+    it('should validate that circuits field is not empty', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -179,13 +179,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        `"circuits" field doesn't have any circuit in config json`
+        `"circuits" field doesn't have any circuit in config json`,
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should validate that fileName field exists", () => {
+    it('should validate that fileName field exists', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -213,13 +213,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        `Field "fileName" is not present`
+        `Field "fileName" is not present`,
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should validate that cID field exists", () => {
+    it('should validate that cID field exists', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -247,13 +247,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        `Field "cID" is not present`
+        `Field "cID" is not present`,
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should validate that cID is unique", () => {
+    it('should validate that cID is unique', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -282,13 +282,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        `Field "cID" is not unique`
+        `Field "cID" is not unique`,
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should validate the proofType", () => {
+    it('should validate the proofType', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -318,13 +318,13 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        /Proof type(.*)is not supported/
+        /Proof type(.*)is not supported/,
       );
 
       fs.rmSync(configPath);
     });
 
-    it("should assign default proofType", () => {
+    it('should assign default proofType', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -346,12 +346,12 @@ describe("ConfigParser test", () => {
       `;
 
       fs.writeFileSync(configPath, jsonConfig);
-      const config = new ConfigParser(configPath).getCircuitConfigFromId("mul");
-      expect(config.compileOptions.snarkType).toBe("groth16");
+      const config = new ConfigParser(configPath).getCircuitConfigFromId('mul');
+      expect(config.compileOptions.snarkType).toBe('groth16');
       fs.rmSync(configPath);
     });
 
-    it("should validate that input file path exists", () => {
+    it('should validate that input file path exists', () => {
       const configPath = `tests/data/${uuidv4()}.json`;
 
       const jsonConfig = `
@@ -381,7 +381,7 @@ describe("ConfigParser test", () => {
 
       fs.writeFileSync(configPath, jsonConfig);
       expect(() => new ConfigParser(configPath)).toThrowError(
-        "Input file path doesn't exist"
+        "Input file path doesn't exist",
       );
 
       fs.rmSync(configPath);

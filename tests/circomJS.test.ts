@@ -1,6 +1,6 @@
-import CircomJS from "../src/circomJs";
-import * as fs from "fs";
-import { Circuit } from "./../src/circuit";
+import CircomJS from '../src/circomJs';
+import * as fs from 'fs';
+import { Circuit } from './../src/circuit';
 
 const testConfigPath = `tests/data/circomJSTestConfig.json`;
 const jsonConfig = `
@@ -29,22 +29,22 @@ const jsonConfig = `
 }
 `;
 
-describe("CircomJS test", () => {
+describe('CircomJS test', () => {
   beforeAll(() => {
     fs.writeFileSync(testConfigPath, jsonConfig);
   });
 
-  it("should instantiate CircomJS", () => {
+  it('should instantiate CircomJS', () => {
     const c = new CircomJS(testConfigPath);
 
     expect(c instanceof CircomJS).toBe(true);
   });
 
-  it("should get circuit from cID", () => {
+  it('should get circuit from cID', () => {
     const c = new CircomJS(testConfigPath);
 
-    const cIDList = c.getCIDs()
-    
+    const cIDList = c.getCIDs();
+
     cIDList.forEach((cID) => {
       const circuit = c.getCircuit(cID);
       expect(circuit instanceof Circuit).toBe(true);

@@ -1,7 +1,7 @@
-import * as fs from "fs";
-import * as path from "path";
-import log from "log";
-import { CFG, BuildCircuitInfo, CircuitConfig, Networks } from "./types";
+import * as fs from 'fs';
+import * as path from 'path';
+import log from 'log';
+import { CFG, BuildCircuitInfo, CircuitConfig, Networks } from './types';
 
 export class ConfigParser {
   private _fp: string;
@@ -17,7 +17,7 @@ export class ConfigParser {
   }
 
   private _parseAndValidate(fp: string): CFG {
-    log.info("reading config, path:", fp);
+    log.info('reading config, path:', fp);
 
     try {
       try {
@@ -34,42 +34,40 @@ export class ConfigParser {
         throw new Error(`Config parsing failed, filepath:${this._fp}`);
       } else if (!parsedConfig.outputDir) {
         throw new Error(
-          `Field "outputDir" is not present in config json, File Path : ${this._fp}`
+          `Field "outputDir" is not present in config json, File Path : ${this._fp}`,
         );
       } else if (!parsedConfig.build) {
         throw new Error(
-          `Field "build" is not present in config json, File Path : ${this._fp}`
+          `Field "build" is not present in config json, File Path : ${this._fp}`,
         );
       } else if (!parsedConfig.build.inputDir) {
         throw new Error(
-          `Field "inputDir" is not present in config json, File Path : ${this._fp}`
+          `Field "inputDir" is not present in config json, File Path : ${this._fp}`,
         );
       } else if (!parsedConfig.build?.circuits) {
         throw new Error(
-          `Field "circuits" is not present in config json, filepath:${this._fp}`
+          `Field "circuits" is not present in config json, filepath:${this._fp}`,
         );
       }
 
       const circuitsValidation = this._areCircuitsValid(parsedConfig);
-      if (circuitsValidation !== "") {
+      if (circuitsValidation !== '') {
         throw new Error(circuitsValidation);
       }
 
       // Check if ouput directory path is valid
       const outputDirectory = path.resolve(parsedConfig.outputDir);
-        if(!fs.existsSync(outputDirectory)){
-          fs.mkdirSync(outputDirectory, {recursive:true})
-        }
-        else {
-          try {
+      if (!fs.existsSync(outputDirectory)) {
+        fs.mkdirSync(outputDirectory, { recursive: true });
+      } else {
+        try {
           fs.accessSync(outputDirectory, fs.constants.W_OK);
-          }
-          catch (err) {
-            throw new Error(
-                `Output directory is not writable. Please check outputDir in config json, filepath:${this._fp}`
-            );
-          }
+        } catch (err) {
+          throw new Error(
+            `Output directory is not writable. Please check outputDir in config json, filepath:${this._fp}`,
+          );
         }
+      }
 
       return Object.assign({}, parsedConfig);
     } catch (err) {
@@ -109,9 +107,9 @@ export class ConfigParser {
       switch (circuitList[i].proofType) {
         case undefined:
           break;
-        case "plonk":
+        case 'plonk':
           break;
-        case "groth16":
+        case 'groth16':
           break;
         default:
           return `Proof type ${circuitList[i].proofType} is not supported`;
@@ -126,10 +124,13 @@ export class ConfigParser {
       }
     }
 
-    return "";
+    return '';
   }
 
-  private _getCircuitInputPath(inputDir: string, circuit: BuildCircuitInfo): string {
+  private _getCircuitInputPath(
+    inputDir: string,
+    circuit: BuildCircuitInfo,
+  ): string {
     return path.join(inputDir, `${circuit.fileName}`);
   }
 
@@ -153,12 +154,12 @@ export class ConfigParser {
         jsPath: path.join(cktOutputDir, `${cktName}_js`),
         // This is here for consistency. It is not used but the output of wasm file in same as wasmPath.
         wasmPath: path.join(cktOutputDir, `${cktName}_js`, `${cktName}.wasm`),
-        zKeyPath: path.join(cktOutputDir, "circuit_final.zkey"), // DO NOT change the names
-        vKeyPath: path.join(cktOutputDir, "verification_key.json"), // DO NOT change the names
+        zKeyPath: path.join(cktOutputDir, 'circuit_final.zkey'), // DO NOT change the names
+        vKeyPath: path.join(cktOutputDir, 'verification_key.json'), // DO NOT change the names
         r1csPath: path.join(cktOutputDir, `${cktName}.r1cs`),
         compileOptions: {
           include: [],
-          snarkType: c.proofType ? c.proofType : "groth16",
+          snarkType: c.proofType ? c.proofType : 'groth16',
           sym: true,
           r1cs: true,
           json: false,
@@ -172,7 +173,7 @@ export class ConfigParser {
   }
 
   private _getCircuitName(fileName: string) {
-    return path.basename(fileName).split(".")[0]
+    return path.basename(fileName).split('.')[0];
   }
 
   getCircuitConfigFromId(cid: string): CircuitConfig {
@@ -190,7 +191,7 @@ export class ConfigParser {
     return this._cfg.networks;
   }
 
-  getCFG(){
-    return this._cfg
+  getCFG() {
+    return this._cfg;
   }
 }
