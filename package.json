@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json && cp -r src/vendors dist/vendors",
     "clean": "rm -rf dist types",
+    "format": "prettier --write \"**/*.js\" \"**/*.ts\"",
     "lint": "eslint .",
     "test": "echo 1"
   },
