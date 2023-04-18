@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json && cp -r src/vendors dist/vendors",
     "clean": "rm -rf dist types",
+    "lint": "eslint .",
     "test": "echo 1"
   },
   "keywords": [
@@ -33,7 +34,10 @@
     "@types/jest": "^29.4.0",
     "@types/log": "^6.3.0",
     "@types/node": "^18.14.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
     "babel-jest": "^29.4.3",
+    "eslint": "^8.38.0",
     "jest": "^29.4.3",
     "r1csfile": "0.0.45",
     "ts-node": "^10.9.1",
