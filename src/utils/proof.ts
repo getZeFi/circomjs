@@ -1,8 +1,8 @@
 import { CircuitInput, ZK_PROOF } from '../types';
 import * as fs from 'fs';
 
-const { groth16 } = require('snarkjs');
-const { plonk } = require('snarkjs');
+import { groth16 } from 'snarkjs';
+import { plonk } from 'snarkjs';
 
 export const genGroth16Proof = async (
   inp: CircuitInput,

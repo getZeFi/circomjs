@@ -1,15 +1,9 @@
 import * as path from 'path';
 import log from 'log';
 
-const { wasm: wasmTester } = require('./vendors/circom_tester');
+import { wasm as wasmTester } from './vendors/circom_tester';
 
-import {
-  CircuitConfig,
-  CircuitInput,
-  Networks,
-  Witness,
-  ZK_PROOF,
-} from './types';
+import { CircuitConfig, CircuitInput, Witness, ZK_PROOF } from './types';
 import { genGrothZKey, genPlonkZKey, genVerificationKey } from './utils/zKey';
 import {
   genGroth16Proof,
@@ -24,13 +18,10 @@ import { getTauFileUrlByConstraints } from './utils/tau';
 
 export class Circuit {
   private _circuitConfig: CircuitConfig;
-  // @ts-ignore // TODO: Remove ts-ignore and use _networks variable in the file
-  private _networks: Networks;
   private _wasmTester: typeof wasmTester;
 
-  constructor(circuitConfig: CircuitConfig, networks: Networks) {
+  constructor(circuitConfig: CircuitConfig) {
     this._circuitConfig = circuitConfig;
-    this._networks = networks;
     this._wasmTester = undefined;
   }
 
@@ -73,7 +64,7 @@ export class Circuit {
     return this._wasmTester.calculateWitness(inp);
   }
 
-  checkConstraints(w: any): Promise<void> {
+  checkConstraints(w: unknown): Promise<void> {
     // throws if there is an error
     return this._wasmTester.checkConstraints(w);
   }
@@ -122,16 +113,18 @@ export class Circuit {
       this._circuitConfig.zKeyPath,
     );
     switch (this._circuitConfig.compileOptions.snarkType) {
-      case 'plonk':
+      case 'plonk': {
         const r1csFp = path.resolve(
           this._circuitConfig.outputDir,
           `${this._circuitConfig.cktName}.r1cs`,
         );
+
         return genPlonkZKey(
           r1csFp,
           this._circuitConfig.powerOfTauFp,
           this._circuitConfig.zKeyPath,
         );
+      }
       case 'groth16':
         return genGrothZKey(
           this._circuitConfig.outputDir,

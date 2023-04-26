@@ -15,10 +15,7 @@ export default class CircomJS {
     this._configParser.listCircuitIds().map((cId) => {
       this._cIdToCircuit.set(
         cId,
-        new Circuit(
-          this._configParser.getCircuitConfigFromId(cId),
-          this._configParser.getNetworks(),
-        ),
+        new Circuit(this._configParser.getCircuitConfigFromId(cId)),
       );
     });
   }

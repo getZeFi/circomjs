@@ -1,10 +1,15 @@
-const fnv = require('fnv-plus');
+import { hash } from 'fnv-plus';
 
-module.exports.fnvHash = fnvHash;
-module.exports.toArray32 = toArray32;
-module.exports.fromArray32 = fromArray32;
-module.exports.flatArray = flatArray;
-module.exports.normalize = normalize;
+const _fnvHash = fnvHash;
+export { _fnvHash as fnvHash };
+const _toArray32 = toArray32;
+export { _toArray32 as toArray32 };
+const _fromArray32 = fromArray32;
+export { _fromArray32 as fromArray32 };
+const _flatArray = flatArray;
+export { _flatArray as flatArray };
+const _normalize = normalize;
+export { _normalize as normalize };
 
 function toArray32(rem, size) {
   const res = []; //new Uint32Array(size); //has no unshift
@@ -56,5 +61,5 @@ function normalize(n, prime) {
 }
 
 function fnvHash(str) {
-  return fnv.hash(str, 64).hex();
+  return hash(str, 64).hex();
 }

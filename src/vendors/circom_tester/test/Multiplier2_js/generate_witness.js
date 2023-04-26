@@ -1,5 +1,5 @@
-const wc = require('./witness_calculator.js');
-const { readFileSync, writeFile } = require('fs');
+import wc from './witness_calculator.js';
+import { readFileSync, writeFile } from 'fs';
 
 if (process.argv.length != 5) {
   console.log(

@@ -1,20 +1,23 @@
-const chai = require('chai');
-const assert = chai.assert;
+import { assert as _assert } from 'chai';
+const assert = _assert;
 
-const fs = require('fs');
-var tmp = require('tmp-promise');
-const path = require('path');
+import { promises, writeFile } from 'fs';
+import { setGracefulCleanup, dir as _dir } from 'tmp-promise';
+import { basename, join } from 'path';
+import * as path from 'path';
 
-const util = require('util');
-const { F1Field } = require('ffjavascript');
-const exec = util.promisify(require('child_process').exec);
+import { promisify } from 'util';
+import { F1Field } from 'ffjavascript';
+import childProcess from 'child_process';
 
-const readR1cs = require('r1csfile').readR1cs;
-const ZqField = require('ffjavascript').ZqField;
+const exec = promisify(childProcess.exec);
 
-const readWtns = require('snarkjs').wtns.exportJson;
+import { readR1cs } from 'r1csfile';
+import { wtns } from 'snarkjs';
 
-module.exports = c_tester;
+const readWtns = wtns.exportJson;
+
+export default c_tester;
 
 BigInt.prototype.toJSON = function () {
   return this.toString();
@@ -26,7 +29,7 @@ async function c_tester(circomInput, _options) {
     'Wrong compiler version. Must be at least 2.0.0',
   );
 
-  const baseName = path.basename(circomInput, '.circom');
+  const baseName = basename(circomInput, '.circom');
   const options = Object.assign({}, _options);
 
   options.c = true;
@@ -38,27 +41,27 @@ async function c_tester(circomInput, _options) {
     typeof options.recompile === 'undefined' ? true : options.recompile; // by default compile
 
   if (typeof options.output === 'undefined') {
-    tmp.setGracefulCleanup();
-    const dir = await tmp.dir({ prefix: 'circom_', unsafeCleanup: true });
+    setGracefulCleanup();
+    const dir = await _dir({ prefix: 'circom_', unsafeCleanup: true });
     //console.log(dir.path);
     options.output = dir.path;
   } else {
     try {
-      await fs.promises.access(options.output);
+      await promises.access(options.output);
     } catch (err) {
       assert(
         options.compile,
         'Cannot set recompile to false if the output path does not exist',
       );
-      await fs.promises.mkdir(options.output, { recursive: true });
+      await promises.mkdir(options.output, { recursive: true });
     }
   }
   if (options.compile) {
     await compile(baseName, circomInput, options);
   } else {
-    const jsPath = path.join(options.output, baseName + '_js');
+    const jsPath = join(options.output, baseName + '_js');
     try {
-      await fs.promises.access(jsPath);
+      await promises.access(jsPath);
     } catch (err) {
       assert(
         false,
@@ -68,7 +71,7 @@ async function c_tester(circomInput, _options) {
       );
     }
   }
-  return new CTester(options.output, baseName, run);
+  return new CTester(options.output, baseName);
 }
 
 async function compile(baseName, fileName, options) {
@@ -99,8 +102,8 @@ async function compile(baseName, fileName, options) {
     assert(false, 'circom compiler error \n' + e);
   }
 
-  const c_folder = path.join(options.output, baseName + '_cpp/');
-  b = await exec('make -C ' + c_folder);
+  const c_folder = join(options.output, baseName + '_cpp/');
+  let b = await exec('make -C ' + c_folder);
   assert(
     b.stderr == '',
     'error building the executable C program\n' + b.stderr,
@@ -108,10 +111,9 @@ async function compile(baseName, fileName, options) {
 }
 
 class CTester {
-  constructor(dir, baseName, witnessCalculator) {
+  constructor(dir, baseName) {
     this.dir = dir;
     this.baseName = baseName;
-    this.witnessCalculator = witnessCalculator;
   }
 
   async release() {
@@ -120,19 +122,19 @@ class CTester {
 
   async calculateWitness(input) {
     const inputjson = JSON.stringify(input);
-    const inputFile = path.join(
+    const inputFile = join(
       this.dir,
       this.baseName + '_cpp/' + this.baseName + '.json',
     );
-    const wtnsFile = path.join(
+    const wtnsFile = join(
       this.dir,
       this.baseName + '_cpp/' + this.baseName + '.wtns',
     );
-    const runc = path.join(this.dir, this.baseName + '_cpp/' + this.baseName);
-    fs.writeFile(inputFile, inputjson, function (err) {
+    const runc = join(this.dir, this.baseName + '_cpp/' + this.baseName);
+    writeFile(inputFile, inputjson, function (err) {
       if (err) throw err;
     });
-    await exec('cd ' + path.join(this.dir, this.baseName + '_cpp/'));
+    await exec('cd ' + join(this.dir, this.baseName + '_cpp/'));
     let proc = await exec(runc + ' ' + inputFile + ' ' + wtnsFile);
     if (proc.stdout !== '') {
       console.log(proc.stdout);
@@ -143,8 +145,8 @@ class CTester {
   async loadSymbols() {
     if (this.symbols) return;
     this.symbols = {};
-    const symsStr = await fs.promises.readFile(
-      path.join(this.dir, this.baseName + '.sym'),
+    const symsStr = await promises.readFile(
+      join(this.dir, this.baseName + '.sym'),
       'utf8',
     );
     const lines = symsStr.split('\n');
@@ -160,21 +162,19 @@ class CTester {
   }
 
   async loadConstraints() {
-    const self = this;
     if (this.constraints) return;
     const r1cs = await readR1cs(path.join(this.dir, this.baseName + '.r1cs'), {
       loadConstraints: true,
       loadMap: false,
-      getFieldFromPrime: (p, singlethread) => new F1Field(p),
+      getFieldFromPrime: (p) => new F1Field(p),
     });
-    self.F = r1cs.F;
-    self.nVars = r1cs.nVars;
-    self.constraints = r1cs.constraints;
+    this.F = r1cs.F;
+    this.nVars = r1cs.nVars;
+    this.constraints = r1cs.constraints;
   }
 
   async assertOut(actualOut, expectedOut) {
-    const self = this;
-    if (!self.symbols) await self.loadSymbols();
+    if (!this.symbols) await this.loadSymbols();
 
     checkObject('main', expectedOut);
 
@@ -188,10 +188,10 @@ class CTester {
           checkObject(prefix + '.' + k, eOut[k]);
         }
       } else {
-        if (typeof self.symbols[prefix] == 'undefined') {
+        if (typeof this.symbols[prefix] == 'undefined') {
           assert(false, 'Output variable not defined: ' + prefix);
         }
-        const ba = actualOut[self.symbols[prefix].varIdx].toString();
+        const ba = actualOut[this.symbols[prefix].varIdx].toString();
         const be = eOut.toString();
         assert.strictEqual(ba, be, prefix);
       }
@@ -199,13 +199,12 @@ class CTester {
   }
 
   async getDecoratedOutput(witness) {
-    const self = this;
     const lines = [];
-    if (!self.symbols) await self.loadSymbols();
-    for (let n in self.symbols) {
+    if (!this.symbols) await this.loadSymbols();
+    for (let n in this.symbols) {
       let v;
-      if (utils.isDefined(witness[self.symbols[n].varIdx])) {
-        v = witness[self.symbols[n].varIdx].toString();
+      if (utils.isDefined(witness[this.symbols[n].varIdx])) {
+        v = witness[this.symbols[n].varIdx].toString();
       } else {
         v = 'undefined';
       }
@@ -215,14 +214,13 @@ class CTester {
   }
 
   async checkConstraints(witness) {
-    const self = this;
-    if (!self.constraints) await self.loadConstraints();
-    for (let i = 0; i < self.constraints.length; i++) {
-      checkConstraint(self.constraints[i]);
+    if (!this.constraints) await this.loadConstraints();
+    for (let i = 0; i < this.constraints.length; i++) {
+      checkConstraint(this.constraints[i]);
     }
 
     function checkConstraint(constraint) {
-      const F = self.F;
+      const F = this.F;
       const a = evalLC(constraint[0]);
       const b = evalLC(constraint[1]);
       const c = evalLC(constraint[2]);
@@ -230,7 +228,7 @@ class CTester {
     }
 
     function evalLC(lc) {
-      const F = self.F;
+      const F = this.F;
       let v = F.zero;
       for (let w in lc) {
         v = F.add(v, F.mul(lc[w], F.e(witness[w])));
@@ -265,24 +263,4 @@ async function compiler_above_version(v) {
 async function readBinWitnessFile(fileName) {
   const buffWitness = await readWtns(fileName);
   return buffWitness;
-}
-
-function fromArray8(arr) {
-  //returns a BigInt
-  var res = BigInt(0);
-  const radix = BigInt(0x100);
-  for (let i = arr.length - 1; i >= 0; i--) {
-    res = res * radix + BigInt(arr[i]);
-  }
-  return res;
-}
-
-function fromArray8ToUint(arr) {
-  //returns a BigInt
-  var res = 0;
-  const radix = 8;
-  for (let i = arr.length - 1; i >= 0; i--) {
-    res = res * radix + arr[i];
-  }
-  return res;
 }

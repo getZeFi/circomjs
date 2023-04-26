@@ -1,4 +1,4 @@
-const { Scalar, buildBn128, buildBls12381 } = require('ffjavascript');
+import { Scalar, buildBn128, buildBls12381 } from 'ffjavascript';
 
 const bls12381r = Scalar.e(
   '73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001',
@@ -16,7 +16,7 @@ const bn128q = Scalar.e(
   '21888242871839275222246405745257275088696311157297823662689037894645226208583',
 );
 
-export async function getCurveFromR(r: any) {
+export async function getCurveFromR(r: unknown) {
   let curve;
   if (Scalar.eq(r, bn128r)) {
     curve = await buildBn128();
@@ -28,7 +28,7 @@ export async function getCurveFromR(r: any) {
   return curve;
 }
 
-export async function getCurveFromQ(q: any) {
+export async function getCurveFromQ(q: unknown) {
   let curve;
   if (Scalar.eq(q, bn128q)) {
     curve = await buildBn128();
@@ -40,7 +40,7 @@ export async function getCurveFromQ(q: any) {
   return curve;
 }
 
-export async function getCurveFromName(name: any) {
+export async function getCurveFromName(name: string) {
   let curve;
   const normName = normalizeName(name);
   if (['BN128', 'BN254', 'ALTBN128'].indexOf(normName) >= 0) {
@@ -52,10 +52,10 @@ export async function getCurveFromName(name: any) {
   }
   return curve;
 
-  function normalizeName(n: any) {
+  function normalizeName(n: string) {
     return n
       .toUpperCase()
       .match(/[A-Za-z0-9]+/g)
-      .join('');
+      ?.join('') ?? '';
   }
 }

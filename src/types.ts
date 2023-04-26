@@ -1,6 +1,6 @@
 export interface CircuitCircomTester {
-  calculateWitness(inp: any): Promise<any>;
-  checkConstraints(w: any): Promise<void>;
+  calculateWitness(inp: unknown): Promise<unknown>;
+  checkConstraints(w: unknown): Promise<void>;
 }
 
 export type CFG = {
@@ -38,9 +38,9 @@ export type SnarkType = 'groth16' | 'plonk' | 'fflonk';
 
 export type ZK_PROOF = {
   proof: {
-    pi_a: any;
-    pi_b: any;
-    pi_c: any;
+    pi_a: unknown;
+    pi_b: unknown;
+    pi_c: unknown;
 
     protocol: string;
     curve: string;

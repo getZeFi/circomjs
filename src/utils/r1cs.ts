@@ -1,4 +1,4 @@
-const { r1cs } = require('snarkjs');
+import { r1cs } from 'snarkjs';
 const { info } = r1cs;
 
 // TODO: provide typescript type for the return type

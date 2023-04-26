@@ -8,6 +8,8 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   env: {
     node: true,
+    jest: true,
+    "es2020": true
   },
   rules: {},
   ignorePatterns: ['node_modules', 'dist'],

@@ -1,23 +1,19 @@
-const chai = require('chai');
-const path = require('path');
-const wasm_tester = require('./../index').wasm;
-const c_tester = require('./../index').c;
+import { join } from 'path';
+import { wasm as wasm_tester } from './../index';
+import { c as c_tester } from './../index';
 
-const F1Field = require('ffjavascript').F1Field;
-const Scalar = require('ffjavascript').Scalar;
-exports.p = Scalar.fromString(
+import { Scalar } from 'ffjavascript';
+export const p = Scalar.fromString(
   '21888242871839275222246405745257275088548364400416034343698204186575808495617',
 );
-const Fr = new F1Field(exports.p);
 
-const assert = chai.assert;
 
 describe('Simple test', function () {
   this.timeout(100000);
 
   it('Checking the compilation of a simple circuit generating wasm', async function () {
     const circuit = await wasm_tester(
-      path.join(__dirname, 'Multiplier2.circom'),
+      join(__dirname, 'Multiplier2.circom'),
     );
     const w = await circuit.calculateWitness({ a: 2, b: 4 });
     await circuit.checkConstraints(w);
@@ -25,8 +21,8 @@ describe('Simple test', function () {
 
   it('Checking the compilation of a simple circuit generating wasm in a given folder', async function () {
     const circuit = await wasm_tester(
-      path.join(__dirname, 'Multiplier2.circom'),
-      { output: path.join(__dirname) },
+      join(__dirname, 'Multiplier2.circom'),
+      { output: join(__dirname) },
     );
     const w = await circuit.calculateWitness({ a: 2, b: 4 });
     await circuit.checkConstraints(w);
@@ -34,15 +30,15 @@ describe('Simple test', function () {
 
   it('Checking the compilation of a simple circuit generating wasm in a given folder without recompiling', async function () {
     const circuit = await wasm_tester(
-      path.join(__dirname, 'Multiplier2.circom'),
-      { output: path.join(__dirname), recompile: false },
+      join(__dirname, 'Multiplier2.circom'),
+      { output: join(__dirname), recompile: false },
     );
     const w = await circuit.calculateWitness({ a: 6, b: 3 });
     await circuit.checkConstraints(w);
   });
 
   it('Checking the compilation of a simple circuit generating C', async function () {
-    const circuit = await c_tester(path.join(__dirname, 'Multiplier2.circom'));
+    const circuit = await c_tester(join(__dirname, 'Multiplier2.circom'));
     try {
       const w = await circuit.calculateWitness({ a: 2, b: 4 });
       await circuit.checkConstraints(w);
@@ -59,8 +55,8 @@ describe('Simple test', function () {
   });
 
   it('Checking the compilation of a simple circuit generating C in a given folder', async function () {
-    const circuit = await c_tester(path.join(__dirname, 'Multiplier2.circom'), {
-      output: path.join(__dirname),
+    const circuit = await c_tester(join(__dirname, 'Multiplier2.circom'), {
+      output: join(__dirname),
     });
     try {
       const w = await circuit.calculateWitness({ a: 2, b: 4 });
@@ -75,8 +71,8 @@ describe('Simple test', function () {
   });
 
   it('Checking the compilation of a simple circuit generating C in a given folder without recompiling', async function () {
-    const circuit = await c_tester(path.join(__dirname, 'Multiplier2.circom'), {
-      output: path.join(__dirname),
+    const circuit = await c_tester(join(__dirname, 'Multiplier2.circom'), {
+      output: join(__dirname),
       recompile: false,
     });
     try {

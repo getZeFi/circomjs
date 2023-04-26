@@ -2,11 +2,12 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-const { zKey } = require('snarkjs');
-const { plonk } = require('snarkjs');
-const { getCurveFromName } = require('./curves');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+import { zKey } from 'snarkjs';
+import { plonk } from 'snarkjs';
+import { getCurveFromName } from './curves';
+import util from 'util';
+import childProcess from 'child_process';
+const exec = util.promisify(childProcess.exec);
 
 export const genGrothZKey = async (
   outputDir: string,
