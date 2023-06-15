@@ -19,64 +19,56 @@ export class ConfigParser {
   private _parseAndValidate(fp: string): CFG {
     log.info('reading config, path:', fp);
 
-    try {
-      try {
-        fs.accessSync(fp, fs.constants.R_OK);
-      } catch (err) {
-        throw err;
-      }
+    fs.accessSync(fp, fs.constants.R_OK);
 
-      const cfgBuff = fs.readFileSync(fp);
+    const cfgBuff = fs.readFileSync(fp);
 
-      const parsedConfig: CFG = JSON.parse(cfgBuff.toString());
+    const parsedConfig: CFG = JSON.parse(cfgBuff.toString());
 
-      if (!parsedConfig) {
-        throw new Error(`Config parsing failed, filepath:${this._fp}`);
-      } else if (!parsedConfig.outputDir) {
-        throw new Error(
-          `Field "outputDir" is not present in config json, File Path : ${this._fp}`,
-        );
-      } else if (!parsedConfig.build) {
-        throw new Error(
-          `Field "build" is not present in config json, File Path : ${this._fp}`,
-        );
-      } else if (!parsedConfig.build.inputDir) {
-        throw new Error(
-          `Field "inputDir" is not present in config json, File Path : ${this._fp}`,
-        );
-      } else if (!parsedConfig.build?.circuits) {
-        throw new Error(
-          `Field "circuits" is not present in config json, filepath:${this._fp}`,
-        );
-      }
-
-      const circuitsValidation = this._areCircuitsValid(parsedConfig);
-      if (circuitsValidation !== '') {
-        throw new Error(circuitsValidation);
-      }
-
-      // Check if ouput directory path is valid
-      const outputDirectory = path.resolve(parsedConfig.outputDir);
-      if (!fs.existsSync(outputDirectory)) {
-        fs.mkdirSync(outputDirectory, { recursive: true });
-      } else {
-        try {
-          fs.accessSync(outputDirectory, fs.constants.W_OK);
-        } catch (err) {
-          throw new Error(
-            `Output directory is not writable. Please check outputDir in config json, filepath:${this._fp}`,
-          );
-        }
-      }
-
-      return Object.assign({}, parsedConfig);
-    } catch (err) {
-      throw err;
+    if (!parsedConfig) {
+      throw new Error(`Config parsing failed, filepath:${this._fp}`);
+    } else if (!parsedConfig.outputDir) {
+      throw new Error(
+        `Field "outputDir" is not present in config json, File Path : ${this._fp}`,
+      );
+    } else if (!parsedConfig.build) {
+      throw new Error(
+        `Field "build" is not present in config json, File Path : ${this._fp}`,
+      );
+    } else if (!parsedConfig.build.inputDir) {
+      throw new Error(
+        `Field "inputDir" is not present in config json, File Path : ${this._fp}`,
+      );
+    } else if (!parsedConfig.build?.circuits) {
+      throw new Error(
+        `Field "circuits" is not present in config json, filepath:${this._fp}`,
+      );
     }
+
+    const circuitsValidation = this._areCircuitsValid(parsedConfig);
+    if (circuitsValidation !== '') {
+      throw new Error(circuitsValidation);
+    }
+
+    // Check if ouput directory path is valid
+    const outputDirectory = path.resolve(parsedConfig.outputDir);
+    if (!fs.existsSync(outputDirectory)) {
+      fs.mkdirSync(outputDirectory, { recursive: true });
+    } else {
+      try {
+        fs.accessSync(outputDirectory, fs.constants.W_OK);
+      } catch (err) {
+        throw new Error(
+          `Output directory is not writable. Please check outputDir in config json, filepath:${this._fp}`,
+        );
+      }
+    }
+
+    return Object.assign({}, parsedConfig);
   }
 
   private _areCircuitsValid(config: CFG): string {
-    let cIDListSoFar = Object.create(null);
+    const cIDListSoFar = Object.create(null);
     const circuitList = config.build?.circuits;
     const {
       build: { inputDir },
@@ -98,7 +90,7 @@ export class ConfigParser {
       }
 
       // Check for unique cID
-      let currentID = circuitList[i].cID;
+      const currentID = circuitList[i].cID;
       if (currentID in cIDListSoFar) {
         return `Field "cID" is not unique in the circuits, File Path : ${this._fp}`;
       }

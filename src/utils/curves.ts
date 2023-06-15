@@ -1,4 +1,4 @@
-const { Scalar, buildBn128, buildBls12381 } = require('ffjavascript');
+import { Scalar, buildBn128, buildBls12381 } from 'ffjavascript';
 
 const bls12381r = Scalar.e(
   '73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001',

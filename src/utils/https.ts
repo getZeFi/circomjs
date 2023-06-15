@@ -6,7 +6,7 @@ export const downloadFile = async (fileUrl, outputPath) => {
   log.info('Downloading File: %s', fileUrl);
 
   const file = fs.createWriteStream(outputPath);
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     https.get(fileUrl, function (response) {
       response.pipe(file);
 

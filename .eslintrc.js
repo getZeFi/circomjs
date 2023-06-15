@@ -9,6 +9,6 @@ module.exports = {
   env: {
     node: true,
   },
-  rules: {},
-  ignorePatterns: ['node_modules', 'dist'],
+  rules: { '@typescript-eslint/no-explicit-any': 'off' },
+  ignorePatterns: ['node_modules', 'dist', 'data', 'build', 'src/vendors'],
 };
