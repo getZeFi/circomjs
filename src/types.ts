@@ -19,6 +19,7 @@ export type BuildCircuitInfo = {
   powerOfTauFp?: string;
   proofType?: SnarkType;
   compilationMode?: CompilationMode;
+  compileOptions?: CompileOptions;
 };
 
 export type CompilationMode = 'wasm' | 'c';
@@ -75,6 +76,8 @@ export type CompileOptions = {
   sym: boolean;
   r1cs: boolean;
   json: boolean;
+  c: boolean;
+  wat: boolean;
   prime: number | boolean;
   O: number;
   verbose: boolean;

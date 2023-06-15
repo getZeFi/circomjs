@@ -164,7 +164,9 @@ export class ConfigParser {
           r1cs: true,
           json: false,
           prime: false,
-          O: 0,
+          c: false,
+          wat: false,
+          O: c.compileOptions ? c.compileOptions.O : 0,
           verbose: false,
         },
       };
