@@ -87,10 +87,13 @@ async function compile(fileName, options) {
   if (options.sym) flags += '--sym ';
   if (options.r1cs) flags += '--r1cs ';
   if (options.json) flags += '--json ';
+  if (options.wat) flags += '--wat ';
+  if (options.c) flags += '--c ';
   if (options.output) flags += '--output ' + options.output + ' ';
   if (options.prime) flags += '--prime ' + options.prime + ' ';
   if (options.O === 0) flags += '--O0 ';
   if (options.O === 1) flags += '--O1 ';
+  if (options.O === 2) flags += '--O2 ';
   if (options.verbose) flags += '--verbose ';
 
   try {
