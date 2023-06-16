@@ -119,13 +119,13 @@ describe('Circuit test', () => {
     const vKeyObject = JSON.parse(fs.readFileSync(vKeyPath, 'utf8'));
 
     expect(
-      vKeyObject.hasOwnProperty('protocol') &&
-        vKeyObject.hasOwnProperty('curve') &&
-        vKeyObject.hasOwnProperty('vk_alpha_1') &&
-        vKeyObject.hasOwnProperty('vk_beta_2') &&
-        vKeyObject.hasOwnProperty('vk_gamma_2') &&
-        vKeyObject.hasOwnProperty('vk_delta_2') &&
-        vKeyObject.hasOwnProperty('vk_alphabeta_12'),
+      Object.prototype.hasOwnProperty.call(vKeyObject, 'protocol') &&
+        Object.prototype.hasOwnProperty.call(vKeyObject, 'curve') &&
+        Object.prototype.hasOwnProperty.call(vKeyObject, 'vk_alpha_1') &&
+        Object.prototype.hasOwnProperty.call(vKeyObject, 'vk_beta_2') &&
+        Object.prototype.hasOwnProperty.call(vKeyObject, 'vk_gamma_2') &&
+        Object.prototype.hasOwnProperty.call(vKeyObject, 'vk_delta_2') &&
+        Object.prototype.hasOwnProperty.call(vKeyObject, 'vk_alphabeta_12'),
     ).toBe(true);
   }, 30000);
 
