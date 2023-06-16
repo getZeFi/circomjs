@@ -4,8 +4,6 @@ import * as fs from 'fs';
 import { ConfigParser } from '../src/configParser';
 
 describe('ConfigParser test', () => {
-  beforeAll(async () => {});
-
   it('should instantiate configparser successfully', () => {
     const configPath = `tests/data/${uuidv4()}.json`;
     const jsonConfig = `

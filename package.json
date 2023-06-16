@@ -8,9 +8,11 @@
   "scripts": {
     "build": "tsc --project tsconfig.json && cp -r src/vendors dist/vendors",
     "clean": "rm -rf dist types",
-    "format": "prettier --write \"**/*.js\" \"**/*.ts\"",
-    "lint": "eslint .",
-    "test": "echo 1"
+    "lint": "eslint \"**/*.{js,ts}\"",
+    "lint:fix": "eslint --fix \"**/*.{js,ts}\"",
+    "format": "prettier --check \"**/*.{ts,js}\"",
+    "format:fix": "prettier --write \"**/*.{ts,js}\"",
+    "test": "jest"
   },
   "keywords": [
     "circom",

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import log from 'log';
 
-const { wasm: wasmTester } = require('./vendors/circom_tester');
+import { wasm as wasmTester } from './vendors/circom_tester';
 
 import {
   CircuitConfig,
@@ -24,6 +24,7 @@ import { getTauFileUrlByConstraints } from './utils/tau';
 
 export class Circuit {
   private _circuitConfig: CircuitConfig;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore // TODO: Remove ts-ignore and use _networks variable in the file
   private _networks: Networks;
   private _wasmTester: typeof wasmTester;
@@ -122,7 +123,7 @@ export class Circuit {
       this._circuitConfig.zKeyPath,
     );
     switch (this._circuitConfig.compileOptions.snarkType) {
-      case 'plonk':
+      case 'plonk': {
         const r1csFp = path.resolve(
           this._circuitConfig.outputDir,
           `${this._circuitConfig.cktName}.r1cs`,
@@ -132,6 +133,7 @@ export class Circuit {
           this._circuitConfig.powerOfTauFp,
           this._circuitConfig.zKeyPath,
         );
+      }
       case 'groth16':
         return genGrothZKey(
           this._circuitConfig.outputDir,

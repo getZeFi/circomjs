@@ -2,10 +2,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-const { zKey } = require('snarkjs');
-const { plonk } = require('snarkjs');
-const { getCurveFromName } = require('./curves');
-const util = require('util');
+import { zKey } from 'snarkjs';
+import { plonk } from 'snarkjs';
+import { getCurveFromName } from './curves';
+import util from 'util';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec);
 
 export const genGrothZKey = async (
